@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #f7fafc;
+  --color-surface-container-low: #f1f4f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #e5e9eb;
+
+  --color-primary: #006162;
+  --color-primary-container: #2c7a7b;
+  --color-on-primary: #ffffff;
+
+  --color-secondary: #006d3d;
+  --color-secondary-container: #8af6b0;
+
+  --color-tertiary: #81472a;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
+  --color-on-surface: #181c1e;
+  --color-on-surface-variant: #3f4949;
+
+  --color-outline-variant: #bec9c8;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Custom utilities for Clinical Serenity design */
+@layer utilities {
+  .shadow-ambient {
+    box-shadow: 0 12px 40px -4px rgba(24, 28, 30, 0.1);
+  }
+
+  .glass-card {
+    @apply bg-surface-container-lowest/80 backdrop-blur-[20px];
+  }
+
+  .bg-hero-gradient {
+    background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-container));
+  }
+
+  .border-ghost {
+    border: 1px solid color-mix(in srgb, var(--color-outline-variant) 15%, transparent);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
