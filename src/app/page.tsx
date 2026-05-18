@@ -2,6 +2,7 @@ import { Navbar } from '../components/layout/Navbar';
 import { PermanentChatbot } from '../components/layout/PermanentChatbot';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { Icon } from '../components/ui/Icon';
 
 export default function Home() {
   return (
@@ -22,7 +23,7 @@ export default function Home() {
           <div className="container mx-auto px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-container/30 text-on-secondary-container font-semibold text-sm">
-                <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                <Icon name="verified_user" className="h-[18px] w-[18px]" />
                 <span>Next-Generation Healthcare</span>
               </div>
               
@@ -54,7 +55,7 @@ export default function Home() {
               {/* Floating Stat Card */}
               <div className="absolute bottom-12 -left-8 z-20 bg-surface-container-lowest/80 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-outline-variant/10 max-w-[240px]">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
+                  <Icon name="favorite" className="h-5 w-5 text-secondary" />
                   <span className="font-display font-bold text-on-surface">Vitality Score</span>
                 </div>
                 <div className="h-12 w-full flex items-end gap-1 px-1">
@@ -89,12 +90,12 @@ export default function Home() {
               ].map((module, i) => (
                 <Card key={i} className="group p-8">
                   <div className={`w-14 h-14 bg-${module.color}/10 rounded-2xl flex items-center justify-center mb-6 text-${module.color} group-hover:bg-${module.color} group-hover:text-on-primary transition-colors`}>
-                    <span className="material-symbols-outlined text-3xl">{module.icon}</span>
+                    <Icon name={module.icon} className="h-8 w-8" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3">{module.title}</h3>
                   <p className="text-on-surface-variant text-sm leading-relaxed mb-6">{module.desc}</p>
                   <a className={`text-${module.color} font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all`} href="#">
-                    {module.link} <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                    {module.link} <Icon name="arrow_forward" className="h-4 w-4" />
                   </a>
                 </Card>
               ))}
@@ -134,17 +135,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer implementation */}
-        <footer className="bg-surface-container-high w-full rounded-t-[2rem] mt-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto px-12 py-16">
-            <div className="space-y-6">
-              <h3 className="text-2xl font-display font-black text-primary">AI Medicine Rec</h3>
-              <p className="text-on-surface-variant font-body text-sm leading-relaxed">
-                © 2026 AI-Based Medicine Recommendation System. All medical data is AI-generated for informational purposes.
-              </p>
-            </div>
-          </div>
-        </footer>
       </main>
       <PermanentChatbot />
     </>

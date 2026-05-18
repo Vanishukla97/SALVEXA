@@ -1,8 +1,10 @@
+import { Icon } from '../ui/Icon';
+
 export function PermanentChatbot() {
   return (
     <div className="fixed bottom-8 right-8 z-50">
       <button className="relative flex items-center justify-center w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 group">
-        <span className="material-symbols-outlined text-3xl">smart_toy</span>
+        <Icon name="smart_toy" className="h-8 w-8" />
         
         {/* Notification Badge */}
         <span className="absolute top-3 right-3 w-3 h-3 bg-error rounded-full border-2 border-primary animate-pulse"></span>
