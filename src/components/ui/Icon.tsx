@@ -65,15 +65,6 @@ export function Icon({ name, className = '', ...props }: IconProps) {
           <path d="M4 18h16M7 18V8m5 10V5m5 13v-7" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
-    case 'smart_toy':
-      return (
-        <svg {...baseProps}>
-          <rect x="6" y="7" width="12" height="10" rx="3" />
-          <circle cx="10" cy="12" r="1" />
-          <circle cx="14" cy="12" r="1" />
-          <path d="M9 15h6M12 4v3" strokeLinecap="round" />
-        </svg>
-      );
     case 'health_and_safety':
       return (
         <svg {...baseProps}>

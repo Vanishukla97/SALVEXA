@@ -4,7 +4,6 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Icon } from '../../components/ui/Icon';
 import { Button } from '../../components/ui/Button';
 import { clearAuthSession, getAuthToken, saveAuthSession } from '../../lib/auth';
@@ -385,7 +384,6 @@ export default function ProfilePage() {
             <p className="text-on-surface-variant">Loading profile...</p>
           </section>
         </main>
-        <PermanentChatbot />
       </>
     );
   }
@@ -887,7 +885,6 @@ export default function ProfilePage() {
         </div>
       ) : null}
 
-      <PermanentChatbot />
     </>
   );
 }

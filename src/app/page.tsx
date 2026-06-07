@@ -1,8 +1,8 @@
 import { Navbar } from '../components/layout/Navbar';
-import { PermanentChatbot } from '../components/layout/PermanentChatbot';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -83,10 +83,10 @@ export default function Home() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: 'medical_services', title: 'Symptom Checker', desc: 'Analyze your symptoms with our AI to understand potential conditions instantly.', color: 'primary', link: 'Check Now' },
-                { icon: 'medication', title: 'Medicine Guide', desc: 'Get intelligent recommendations and dosage guidelines tailored to your profile.', color: 'secondary', link: 'Explore' },
-                { icon: 'qr_code_scanner', title: 'Prescript Scanner', desc: 'Instantly digitize paper prescriptions to track refills and interactions.', color: 'tertiary', link: 'Scan Now' },
-                { icon: 'monitoring', title: 'Profile Tracking', desc: 'Monitor your long-term health metrics and history in one secure dashboard.', color: 'primary', link: 'View History' }
+                { icon: 'medical_services', title: 'Symptom Checker', desc: 'Analyze your symptoms with our AI to understand potential conditions instantly.', color: 'primary', link: 'Check Now', href: '/symptoms' },
+                { icon: 'medication', title: 'Medicine Guide', desc: 'Get intelligent recommendations and dosage guidelines tailored to your profile.', color: 'secondary', link: 'Explore', href: '/recommendations' },
+                { icon: 'qr_code_scanner', title: 'Prescript Scanner', desc: 'Instantly digitize paper prescriptions to track refills and interactions.', color: 'tertiary', link: 'Scan Now', href: '/scanner' },
+                { icon: 'monitoring', title: 'Profile Tracking', desc: 'Monitor your long-term health metrics and history in one secure dashboard.', color: 'primary', link: 'View History', href: '/medical-history' }
               ].map((module, i) => (
                 <Card key={i} className="group p-8">
                   <div className={`w-14 h-14 bg-${module.color}/10 rounded-2xl flex items-center justify-center mb-6 text-${module.color} group-hover:bg-${module.color} group-hover:text-on-primary transition-colors`}>
@@ -94,9 +94,9 @@ export default function Home() {
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3">{module.title}</h3>
                   <p className="text-on-surface-variant text-sm leading-relaxed mb-6">{module.desc}</p>
-                  <a className={`text-${module.color} font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all`} href="#">
+                  <Link className={`text-${module.color} font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all`} href={module.href}>
                     {module.link} <Icon name="arrow_forward" className="h-4 w-4" />
-                  </a>
+                  </Link>
                 </Card>
               ))}
             </div>
@@ -136,7 +136,6 @@ export default function Home() {
         </section>
 
       </main>
-      <PermanentChatbot />
     </>
   );
 }

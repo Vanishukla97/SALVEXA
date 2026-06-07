@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 
 export default function PrivacyPolicyPage() {
   return (
@@ -108,7 +107,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </section>
       </main>
-      <PermanentChatbot />
     </>
   );
 }

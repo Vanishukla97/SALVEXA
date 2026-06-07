@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Icon } from '../../components/ui/Icon';
 import { clearAuthSession, getAuthToken } from '../../lib/auth';
 import { fetchApiJson } from '../../lib/api';
@@ -402,7 +401,6 @@ export default function MedicalHistoryPage() {
           </section>
         ) : null}
       </main>
-      <PermanentChatbot />
     </>
   );
 }

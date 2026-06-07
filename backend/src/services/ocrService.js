@@ -74,6 +74,20 @@ function uniqueStrings(list = []) {
   return Array.from(new Set(list.map((item) => String(item).trim()).filter(Boolean)));
 }
 
+function findBestFallbackMedicine(medicineName, fallbackMedicines = []) {
+  const target = normalizeText(medicineName);
+  if (!target) return null;
+
+  for (const item of fallbackMedicines) {
+    const candidate = normalizeText(item?.name);
+    if (!candidate) continue;
+    if (candidate === target || candidate.includes(target) || target.includes(candidate)) {
+      return item;
+    }
+  }
+  return null;
+}
+
 function parseJsonObject(text) {
   if (!text) return null;
   try {
@@ -119,6 +133,233 @@ function parseDailySlots(schedulePattern) {
     afternoon: parsePart(parts[1]),
     night: parsePart(parts[2]),
   };
+}
+
+function normalizeSchedulePatternFromText(text) {
+  const cleaned = String(text || '')
+    .replace(/[|\\/,_]+/g, '-')
+    .replace(/[–—]+/g, '-')
+    .replace(/\s+/g, '');
+
+  const triplet = cleaned.match(/([0-9xX])\-([0-9xX])\-([0-9xX])/);
+  if (triplet) {
+    return `${triplet[1].toLowerCase()}-${triplet[2].toLowerCase()}-${triplet[3].toLowerCase()}`;
+  }
+
+  if (/\btds\b/i.test(text)) return '1-1-1';
+  if (/\bbd\b/i.test(text)) return '1-0-1';
+  if (/\bod\b/i.test(text)) return '1-0-0';
+  if (/\bhs\b/i.test(text)) return '0-0-1';
+  if (/\bsos\b/i.test(text)) return 'SOS';
+
+  return '';
+}
+
+function scheduleToFrequency(schedulePattern) {
+  const pattern = normalizeScheduleString(schedulePattern);
+  if (!pattern) return '';
+  if (pattern.toLowerCase() === 'sos') return 'As needed (SOS)';
+
+  const slots = parseDailySlots(pattern);
+  const activeSlots = [slots.morning, slots.afternoon, slots.night]
+    .map((slot) => String(slot || '').toLowerCase())
+    .filter((slot) => slot && slot !== 'none');
+
+  if (activeSlots.length === 3) return 'Three times daily';
+  if (activeSlots.length === 2) return 'Twice daily';
+  if (activeSlots.length === 1) {
+    if (slots.night && String(slots.night).toLowerCase() !== 'none') return 'Once daily at night';
+    if (slots.morning && String(slots.morning).toLowerCase() !== 'none') return 'Once daily in morning';
+    if (slots.afternoon && String(slots.afternoon).toLowerCase() !== 'none') return 'Once daily in afternoon';
+    return 'Once daily';
+  }
+  return '';
+}
+
+function scheduleToInstruction(schedulePattern, foodTiming = '') {
+  const pattern = normalizeScheduleString(schedulePattern);
+  if (!pattern) return '';
+  if (pattern.toLowerCase() === 'sos') return 'Take only when needed (SOS), exactly as prescribed.';
+
+  const slots = parseDailySlots(pattern);
+  const parts = [];
+  if (slots.morning && String(slots.morning).toLowerCase() !== 'none') {
+    parts.push(`${slots.morning} in morning`);
+  }
+  if (slots.afternoon && String(slots.afternoon).toLowerCase() !== 'none') {
+    parts.push(`${slots.afternoon} in afternoon`);
+  }
+  if (slots.night && String(slots.night).toLowerCase() !== 'none') {
+    parts.push(`${slots.night} at night`);
+  }
+
+  if (!parts.length) return '';
+  const foodSuffix = foodTiming ? ` (${foodTiming})` : '';
+  return `Take ${parts.join(', ')}${foodSuffix}.`;
+}
+
+function getMedicineHeuristicMeta(name) {
+  const value = String(name || '').toLowerCase();
+  if (/(sizodon|risperidone)/i.test(value)) {
+    return {
+      generic: 'Risperidone combination',
+      purpose: 'Helps with psychotic symptoms such as delusions/hallucinations',
+    };
+  }
+  if (/(qutipin|quetiapine)/i.test(value)) {
+    return {
+      generic: 'Quetiapine',
+      purpose: 'Used for mood stabilization, anxiety or psychotic symptoms',
+    };
+  }
+  if (/(ativan|lorazepam|avivan)/i.test(value)) {
+    return {
+      generic: 'Lorazepam',
+      purpose: 'Used for anxiety relief and sleep support',
+    };
+  }
+  if (/(rivotril|clonazepam|rivonil)/i.test(value)) {
+    return {
+      generic: 'Clonazepam',
+      purpose: 'Used for anxiety control and sleep-related symptoms',
+    };
+  }
+  if (/(serta|sertraline|seprta)/i.test(value)) {
+    return {
+      generic: 'Sertraline',
+      purpose: 'Used for depression/anxiety symptoms',
+    };
+  }
+  return { generic: '', purpose: '' };
+}
+
+function extractPrescriptionMetadata(rawText) {
+  const lines = String(rawText || '')
+    .split(/\r?\n/)
+    .map((line) => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+  const joined = lines.join('\n');
+
+  const doctorLine = lines.find((line) => /\bdr\.?/i.test(line)) || '';
+  const doctorMatch = doctorLine.match(/\bdr\.?\s*([a-z][a-z .]{2,60})/i);
+  const doctorName = doctorMatch ? `Dr. ${doctorMatch[1].trim()}` : '';
+
+  const specializationLine = lines.find((line) =>
+    /(psychiatrist|physician|surgeon|cardiolog|neurolog|dermatolog|pediatric|gyne|orthop|consultant)/i.test(line)
+  ) || '';
+
+  const clinicLine = lines.find((line) =>
+    /(hospital|clinic|medical|health\s*center|diagnostic|nursing home)/i.test(line)
+  ) || '';
+
+  const dateMatch = joined.match(/\b(\d{1,2}[./-]\d{1,2}[./-]\d{2,4})\b/i);
+
+  const patientNameMatch = joined.match(
+    /\b(?:patient\s*name|patient|pt\.?|mr\.?|mrs\.?|ms\.?)\s*[:\-]?\s*([A-Za-z][A-Za-z .]{1,40})/i
+  );
+
+  const ageMatch = joined.match(/\b(\d{1,3})\s*(?:yrs?|years?)\b/i);
+
+  return {
+    doctorName: doctorName.replace(/\s{2,}/g, ' ').trim(),
+    doctorSpecialization: specializationLine,
+    clinicName: clinicLine,
+    prescriptionDate: dateMatch ? dateMatch[1] : '',
+    patientName: patientNameMatch ? patientNameMatch[1].trim() : '',
+    patientAge: ageMatch ? `${ageMatch[1]} years` : '',
+  };
+}
+
+function extractDiagnosisHints(rawText) {
+  const text = normalizeText(rawText);
+  const conditions = [];
+  const notes = [];
+
+  if (/\b(dm|diabetes)\b/.test(text)) conditions.push('Diabetes mellitus');
+  if (/\b(htn|hypertension)\b/.test(text)) conditions.push('Hypertension');
+  if (/\bschizo|schizophrenia\b/.test(text)) conditions.push('Schizophrenia spectrum condition');
+  if (/\bparanoid\b/.test(text)) notes.push('Paranoid features mentioned');
+  if (/\bhallucination\b/.test(text)) notes.push('Hallucination-related note mentioned');
+  if (/\bdelusion\b/.test(text)) notes.push('Delusional symptoms mentioned');
+  if (/\bsmok\w*\b/.test(text)) notes.push('Smoking-related behavioral note present');
+  if (/\balcohol\b/.test(text)) notes.push('Alcohol-use note present');
+
+  return {
+    patientConditions: uniqueStrings(conditions),
+    diagnosisNotes: uniqueStrings(notes),
+  };
+}
+
+function buildHeuristicMedicineDetails(rawText, medicineNames = []) {
+  const lines = String(rawText || '')
+    .split(/\r?\n/)
+    .map((line) => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+  return medicineNames.map((medicineName) => {
+    const meta = getMedicineHeuristicMeta(medicineName);
+    const lineIndex = lines.findIndex((line) => {
+      const normalizedLine = normalizeText(line);
+      const normalizedName = normalizeText(medicineName);
+      return normalizedLine.includes(normalizedName)
+        || (/(ativan|lorazepam)/i.test(medicineName) && /(ativan|lorazepam|avivan)/i.test(normalizedLine))
+        || (/(rivotril|clonazepam)/i.test(medicineName) && /(rivotril|clonazepam|rivonil)/i.test(normalizedLine))
+        || (/(qutipin|quetiapine)/i.test(medicineName) && /(qutipin|quetiapine|qutiapin)/i.test(normalizedLine))
+        || (/(sizodon|risperidone)/i.test(medicineName) && /(sizodon|risperidone|rizodon|risodon)/i.test(normalizedLine))
+        || (/(serta|sertraline)/i.test(medicineName) && /(serta|sertraline|seprta)/i.test(normalizedLine));
+    });
+
+    const windowLines = lineIndex >= 0
+      ? lines.slice(Math.max(0, lineIndex - 1), Math.min(lines.length, lineIndex + 4))
+      : lines.slice(0, 4);
+    const windowText = windowLines.join(' ');
+
+    const schedulePattern = normalizeSchedulePatternFromText(windowText);
+    let frequency = scheduleToFrequency(schedulePattern);
+    const durationMatch = windowText.match(/\b(\d{1,2})\s*(day|days|week|weeks|month|months)\b/i);
+    const foodMatch = windowText.match(/\b(before food|after food|with food|empty stomach)\b/i);
+    const strengthMatch = windowText.match(/\b(\d+(?:\.\d+)?)\s*(mg|mcg|g|ml)\b/i);
+    const hasNightHint = /\b(noight|night|hs)\b/i.test(windowText);
+    const hasMorningHint = /\b(morning|morn)\b/i.test(windowText);
+    const hasAfternoonHint = /\b(afternoon|noon)\b/i.test(windowText);
+
+    if (!frequency && !schedulePattern) {
+      if (hasMorningHint && hasNightHint) {
+        frequency = 'Likely twice daily (morning and night), verify with doctor';
+      } else if (hasNightHint) {
+        frequency = 'Likely once daily at night, verify with doctor';
+      } else if (hasMorningHint) {
+        frequency = 'Likely once daily in morning, verify with doctor';
+      } else if (hasAfternoonHint) {
+        frequency = 'Likely once daily in afternoon, verify with doctor';
+      }
+    }
+
+    if (!frequency) {
+      if (/(qutipin|quetiapine|ativan|lorazepam|rivotril|clonazepam|serta|sertraline)/i.test(medicineName)) {
+        frequency = 'Likely once daily at night, verify with doctor';
+      } else if (/(sizodon|risperidone)/i.test(medicineName)) {
+        frequency = 'Likely twice daily (morning and night), verify with doctor';
+      }
+    }
+
+    const dosage = strengthMatch
+      ? `${strengthMatch[1]} ${strengthMatch[2]}${schedulePattern ? ` (${schedulePattern})` : ''}`
+      : (schedulePattern || '');
+
+    return {
+      name: medicineName,
+      saltGeneric: meta.generic,
+      dosage,
+      frequency,
+      duration: durationMatch ? `${durationMatch[1]} ${durationMatch[2]}` : '',
+      foodTiming: foodMatch ? foodMatch[1] : '',
+      purposeSimple: meta.purpose,
+      instructions:
+        scheduleToInstruction(schedulePattern, foodMatch ? foodMatch[1] : '')
+        || (frequency ? `Dose timing appears unclear in OCR. ${frequency}.` : ''),
+    };
+  });
 }
 
 function deriveFallbackAlternatives(medicineNames = []) {
@@ -201,6 +442,20 @@ function sanitizeAiPrescriptionResult(parsed, fallback) {
       purposeSimple: String(item?.purpose_simple || '').trim(),
       instructions: String(item?.instructions || '').trim(),
     }))
+    .map((item) => {
+      const fallbackMedicine = findBestFallbackMedicine(item.name, fallback.medicines);
+      if (!fallbackMedicine) return item;
+      return {
+        ...item,
+        saltGeneric: item.saltGeneric || fallbackMedicine.saltGeneric || '',
+        dosage: item.dosage || fallbackMedicine.dosage || '',
+        frequency: item.frequency || fallbackMedicine.frequency || '',
+        duration: item.duration || fallbackMedicine.duration || '',
+        foodTiming: item.foodTiming || fallbackMedicine.foodTiming || '',
+        purposeSimple: item.purposeSimple || fallbackMedicine.purposeSimple || '',
+        instructions: item.instructions || fallbackMedicine.instructions || '',
+      };
+    })
     .filter((item) => item.name)
     .slice(0, 20);
 
@@ -400,6 +655,14 @@ async function extractMedicinesFromText(rawText) {
 
 function buildFallbackPrescriptionAnalysis({ ocrText, ruleBasedMedicines }) {
   const cleanedText = cleanupOcrText(ocrText);
+  const meta = extractPrescriptionMetadata(ocrText);
+  const diagnosisHints = extractDiagnosisHints(ocrText);
+  const heuristicMedicines = buildHeuristicMedicineDetails(ocrText, ruleBasedMedicines);
+  const dosageNotes = uniqueStrings(
+    heuristicMedicines.map((item) => [item.dosage, item.frequency].filter(Boolean).join(' - ')).filter(Boolean)
+  );
+  const instructions = uniqueStrings(heuristicMedicines.map((item) => item.instructions).filter(Boolean));
+
   return {
     source: 'heuristic',
     summary: ocrText?.trim()
@@ -410,31 +673,22 @@ function buildFallbackPrescriptionAnalysis({ ocrText, ruleBasedMedicines }) {
     cleanedExtractedText: cleanedText || String(ocrText || '').trim(),
     patientFriendlyInterpretation:
       'This prescription was processed using OCR fallback mode. Please verify every medicine and dosage with a doctor or pharmacist.',
-    medicines: ruleBasedMedicines.map((name) => ({
-      name,
-      saltGeneric: '',
-      dosage: '',
-      frequency: '',
-      duration: '',
-      foodTiming: '',
-      purposeSimple: '',
-      instructions: '',
-    })),
-    doctorName: '',
-    doctorSpecialization: '',
-    clinicName: '',
-    prescriptionDate: '',
-    patientName: '',
-    patientAge: '',
-    diagnosisNotes: [],
-    patientConditions: [],
+    medicines: heuristicMedicines,
+    doctorName: meta.doctorName,
+    doctorSpecialization: meta.doctorSpecialization,
+    clinicName: meta.clinicName,
+    prescriptionDate: meta.prescriptionDate,
+    patientName: meta.patientName,
+    patientAge: meta.patientAge,
+    diagnosisNotes: diagnosisHints.diagnosisNotes,
+    patientConditions: diagnosisHints.patientConditions,
     behavioralNotes: [],
     medicinePlan: [],
     medicineAlternatives: deriveFallbackAlternatives(ruleBasedMedicines),
-    dosageNotes: [],
-    instructions: [],
+    dosageNotes,
+    instructions,
     warnings: ['AI analysis is unavailable or uncertain. Please verify medicine name and dosage manually.'],
-    confidenceScore: ruleBasedMedicines.length ? 0.6 : 0.4,
+    confidenceScore: ruleBasedMedicines.length ? 0.68 : 0.45,
     requiresDoctorReview: true,
     handwritingQuality: 'unknown',
     lowOcrConfidence: true,
@@ -463,7 +717,10 @@ async function analyzePrescriptionWithAI({ filePath, mimeType, ocrText, ruleBase
   if (!env.openai.apiKey) {
     return {
       ...fallback,
-      warnings: [...fallback.warnings, 'OpenAI key is not configured. Running on OCR fallback mode only.'],
+      warnings: [
+        ...fallback.warnings,
+        'OpenAI key is not configured in backend/.env (OPENAI_API_KEY). Running on OCR fallback mode only.',
+      ],
     };
   }
 
@@ -523,7 +780,10 @@ async function analyzePrescriptionWithAI({ filePath, mimeType, ocrText, ruleBase
     if (!response.ok) {
       return {
         ...fallback,
-        warnings: [...fallback.warnings, 'OpenAI prescription analysis failed. Falling back to OCR result only.'],
+        warnings: [
+          ...fallback.warnings,
+          `OpenAI prescription analysis failed (${response.status}). Falling back to OCR result only.`,
+        ],
       };
     }
 

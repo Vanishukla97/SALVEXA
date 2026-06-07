@@ -4,7 +4,6 @@ import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Icon } from '../../components/ui/Icon';
@@ -184,7 +183,6 @@ export default function SignupPage() {
           </div>
         </div>
       </main>
-      <PermanentChatbot />
     </>
   );
 }

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Icon } from '../../components/ui/Icon';
@@ -498,7 +497,6 @@ export default function SettingsPage() {
           </div>
         )}
       </main>
-      <PermanentChatbot />
     </>
   );
 }
