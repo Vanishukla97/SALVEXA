@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Icon } from '../../components/ui/Icon';
@@ -19,9 +18,10 @@ type ProfileForm = {
   height: string;
 };
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,6 +29,7 @@ export default function Login() {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [token, setToken] = useState('');
+
   const [profileForm, setProfileForm] = useState<ProfileForm>({
     age: '',
     gender: '',
@@ -62,6 +63,7 @@ export default function Login() {
       });
 
       const payload = await response.json();
+
       if (!response.ok || !payload?.success) {
         throw new Error(payload?.message || 'Login failed');
       }
@@ -76,10 +78,14 @@ export default function Login() {
 
       try {
         const profileRes = await fetch(`${getApiBaseUrl()}/profile`, {
-          headers: { Authorization: `Bearer ${payload.data.token}` },
+          headers: {
+            Authorization: `Bearer ${payload.data.token}`,
+          },
           credentials: 'include',
         });
+
         const profilePayload = await profileRes.json();
+
         if (profilePayload?.success && profilePayload.data) {
           setProfileForm({
             age: profilePayload.data.age ? String(profilePayload.data.age) : '',
@@ -102,7 +108,9 @@ export default function Login() {
 
   const handleProfileSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!token) return;
+
     setSavingProfile(true);
     setError('');
 
@@ -123,6 +131,7 @@ export default function Login() {
       });
 
       const payload = await response.json();
+
       if (!response.ok || !payload?.success) {
         throw new Error(payload?.message || 'Failed to save profile information');
       }
@@ -139,6 +148,7 @@ export default function Login() {
   return (
     <>
       <Navbar />
+
       <main className="flex-grow flex items-center justify-center relative overflow-hidden px-4 md:px-8 py-20 min-h-screen">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/4 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"></div>
@@ -150,16 +160,21 @@ export default function Login() {
           <div className="hidden lg:block space-y-8 pr-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 text-primary rounded-full mb-4">
               <Icon name="health_and_safety" className="h-5 w-5" />
-              <span className="text-sm font-semibold font-label">Clinical Serenity Architecture</span>
+              <span className="text-sm font-semibold font-label">
+                Clinical Serenity Architecture
+              </span>
             </div>
+
             <h1 className="font-display text-5xl font-black text-on-surface leading-[1.1] tracking-tight">
               Your Personalized <br />
               <span className="text-primary">Medical Insights</span> <br />
               Start Here.
             </h1>
+
             <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
               Access high-fidelity AI recommendations tailored to your unique symptoms and health profile.
             </p>
+
             <div className="relative w-full aspect-square max-w-md rounded-2xl overflow-hidden shadow-2xl">
               <img
                 className="w-full h-full object-cover"
@@ -173,9 +188,15 @@ export default function Login() {
           <div className="flex flex-col items-center lg:items-start w-full max-w-md mx-auto">
             <div className="w-full bg-surface-container-lowest p-8 md:p-12 rounded-2xl shadow-ambient">
               <div className="text-center lg:text-left mb-10">
-                <div className="font-display font-black text-2xl text-primary mb-2">AI Medicine Rec</div>
-                <h2 className="font-display text-3xl font-bold text-on-surface">Welcome back</h2>
-                <p className="text-on-surface-variant mt-2 font-label text-sm">Please enter your credentials</p>
+                <div className="font-display font-black text-2xl text-primary mb-2">
+                  AI Medicine Rec
+                </div>
+                <h2 className="font-display text-3xl font-bold text-on-surface">
+                  Welcome back
+                </h2>
+                <p className="text-on-surface-variant mt-2 font-label text-sm">
+                  Please enter your credentials
+                </p>
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit} method="post" action="/login">
@@ -202,7 +223,9 @@ export default function Login() {
                 />
 
                 {error ? (
-                  <p className="text-sm text-error bg-error-container/40 px-3 py-2 rounded-lg">{error}</p>
+                  <p className="text-sm text-error bg-error-container/40 px-3 py-2 rounded-lg">
+                    {error}
+                  </p>
                 ) : null}
 
                 <Button
@@ -221,6 +244,7 @@ export default function Login() {
                     Create account
                   </Link>
                 </p>
+
                 <p className="text-xs text-on-surface-variant text-center">
                   By continuing, you agree to{' '}
                   <Link href="/terms" className="text-primary font-semibold hover:underline">
@@ -237,17 +261,21 @@ export default function Login() {
       {showProfilePopup ? (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
           <div className="relative w-full max-w-xl rounded-[2rem] overflow-hidden border border-outline-variant/20 shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-surface-container-lowest via-surface to-surface-container-low"></div>
+
             <div className="relative p-8 md:p-10">
               <div className="mb-8">
                 <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
                   <Icon name="verified_user" className="h-4 w-4" />
                   One-Time Setup
                 </p>
+
                 <h3 className="text-3xl font-display font-black text-on-surface mt-4">
                   Complete Your Health Snapshot
                 </h3>
+
                 <p className="text-on-surface-variant mt-2">
                   Add your basic details so recommendations become more personalized and safe.
                 </p>
@@ -263,12 +291,19 @@ export default function Login() {
                     max={120}
                     value={profileForm.age}
                     onChange={(event) =>
-                      setProfileForm((prev) => ({ ...prev, age: event.target.value }))
+                      setProfileForm((prev) => ({
+                        ...prev,
+                        age: event.target.value,
+                      }))
                     }
                     required
                   />
+
                   <div className="flex flex-col gap-2 w-full">
-                    <label className="text-sm font-medium text-on-surface-variant">Gender</label>
+                    <label className="text-sm font-medium text-on-surface-variant">
+                      Gender
+                    </label>
+
                     <select
                       className="bg-surface-container-high rounded-xl px-4 py-3 text-on-surface outline-none focus:bg-surface-container-lowest transition-all"
                       value={profileForm.gender}
@@ -286,6 +321,7 @@ export default function Login() {
                       <option value="other">Other</option>
                     </select>
                   </div>
+
                   <Input
                     type="number"
                     label="Weight (kg)"
@@ -294,10 +330,14 @@ export default function Login() {
                     step="0.1"
                     value={profileForm.weight}
                     onChange={(event) =>
-                      setProfileForm((prev) => ({ ...prev, weight: event.target.value }))
+                      setProfileForm((prev) => ({
+                        ...prev,
+                        weight: event.target.value,
+                      }))
                     }
                     required
                   />
+
                   <Input
                     type="number"
                     label="Height (cm)"
@@ -306,7 +346,10 @@ export default function Login() {
                     step="0.1"
                     value={profileForm.height}
                     onChange={(event) =>
-                      setProfileForm((prev) => ({ ...prev, height: event.target.value }))
+                      setProfileForm((prev) => ({
+                        ...prev,
+                        height: event.target.value,
+                      }))
                     }
                     required
                   />
@@ -326,8 +369,20 @@ export default function Login() {
           </div>
         </div>
       ) : null}
-
-      <PermanentChatbot />
     </>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-on-surface">
+          Loading...
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }

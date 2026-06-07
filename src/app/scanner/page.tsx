@@ -1,10 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Navbar } from '../../components/layout/Navbar';
-import { PermanentChatbot } from '../../components/layout/PermanentChatbot';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Icon } from '../../components/ui/Icon';
@@ -60,9 +59,10 @@ function safeText(value?: string) {
   return trimmed || 'Not clearly identified';
 }
 
-export default function Scanner() {
+function ScannerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [isPdfFile, setIsPdfFile] = useState(false);
@@ -74,7 +74,9 @@ export default function Scanner() {
 
   useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
     };
   }, [previewUrl]);
 
@@ -91,6 +93,7 @@ export default function Scanner() {
     const loadSavedReport = async () => {
       setIsLoadingSavedReport(true);
       setError('');
+
       try {
         const result = await fetchApiJson<{
           success?: boolean;
@@ -107,6 +110,7 @@ export default function Scanner() {
         }
 
         const row = result.payload.data;
+
         const extracted = Array.isArray(row.extracted_medicines)
           ? row.extracted_medicines.map((item) => String(item))
           : typeof row.extracted_medicines === 'string'
@@ -137,6 +141,7 @@ export default function Scanner() {
 
   const onSelectFile = (file: File | null) => {
     if (!file) return;
+
     const lowerName = file.name.toLowerCase();
     const isImage = file.type.startsWith('image/') || /\.(png|jpg|jpeg|webp)$/i.test(lowerName);
     const isPdf = file.type === 'application/pdf' || lowerName.endsWith('.pdf');
@@ -146,7 +151,10 @@ export default function Scanner() {
       return;
     }
 
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
     setError('');
     setScanData(null);
     setSelectedFile(file);
@@ -155,7 +163,10 @@ export default function Scanner() {
   };
 
   const handleRemove = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
     setSelectedFile(null);
     setPreviewUrl('');
     setIsPdfFile(false);
@@ -169,7 +180,9 @@ export default function Scanner() {
       setError('Please upload a prescription first.');
       return;
     }
+
     const token = getAuthToken();
+
     if (!token) {
       setError('Please login first to analyze prescription.');
       router.push('/login');
@@ -191,10 +204,13 @@ export default function Scanner() {
         credentials: 'include',
         body: formData,
       });
+
       const payload = await response.json();
+
       if (!response.ok || !payload?.success) {
         throw new Error(payload?.message || 'Unable to scan prescription');
       }
+
       setScanData(payload.data as ScanData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to scan prescription');
@@ -216,7 +232,9 @@ export default function Scanner() {
 
   const medicineCards = useMemo(() => {
     const details = scanData?.analysis?.medicineDetails || [];
+
     if (details.length) return details;
+
     return (scanData?.extractedMedicines || []).map((name) => ({
       name,
       saltGeneric: '',
@@ -231,18 +249,22 @@ export default function Scanner() {
 
   const warnings = useMemo(() => {
     const list = scanData?.analysis?.warnings || [];
+
     if (list.length) return list;
+
     return ['Take medicines only under medical supervision and verify with a doctor/pharmacist.'];
   }, [scanData?.analysis?.warnings]);
 
   return (
     <>
       <Navbar />
+
       <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
         <section className="mb-12 text-center md:text-left">
           <h1 className="font-display text-5xl font-extrabold text-on-surface tracking-tight mb-4 max-w-4xl">
             Prescription <span className="text-primary">Care Assistant</span>
           </h1>
+
           <p className="font-body text-on-surface-variant text-lg max-w-3xl">
             Upload a prescription and get a clean, patient-friendly structured explanation. We do not show messy OCR dumps.
           </p>
@@ -264,12 +286,15 @@ export default function Scanner() {
                   accept="image/*,application/pdf,.pdf"
                   onChange={(event) => onSelectFile(event.target.files?.[0] || null)}
                 />
+
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Icon name="description" className="h-9 w-9 text-primary" />
                 </div>
+
                 <p className="font-display font-bold text-lg mb-2 text-on-surface">
                   {selectedFile ? selectedFile.name : 'Choose prescription file'}
                 </p>
+
                 <p className="text-on-surface-variant text-sm">
                   PNG, JPG, JPEG, PDF supported
                 </p>
@@ -278,9 +303,17 @@ export default function Scanner() {
               <div className="mt-5 aspect-[3/4] bg-surface-container-high rounded-2xl overflow-hidden relative">
                 {previewUrl ? (
                   isPdfFile ? (
-                    <iframe title="Uploaded prescription preview" src={previewUrl} className="w-full h-full" />
+                    <iframe
+                      title="Uploaded prescription preview"
+                      src={previewUrl}
+                      className="w-full h-full"
+                    />
                   ) : (
-                    <img alt="Uploaded prescription preview" className="w-full h-full object-cover" src={previewUrl} />
+                    <img
+                      alt="Uploaded prescription preview"
+                      className="w-full h-full object-cover"
+                      src={previewUrl}
+                    />
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-on-surface-variant text-sm">
@@ -291,7 +324,9 @@ export default function Scanner() {
                 {isScanning ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
                     <div className="w-14 h-14 rounded-full border-4 border-t-primary border-r-transparent border-b-primary border-l-transparent animate-spin mb-3"></div>
-                    <span className="font-display font-bold text-white">Analyzing Prescription...</span>
+                    <span className="font-display font-bold text-white">
+                      Analyzing Prescription...
+                    </span>
                   </div>
                 ) : null}
               </div>
@@ -307,6 +342,7 @@ export default function Scanner() {
                   <Icon name="diagnosis" className="h-5 w-5" />
                   {isScanning ? 'Analyzing...' : 'Scan & Interpret'}
                 </Button>
+
                 <Button
                   variant="secondary"
                   className="py-3"
@@ -319,6 +355,7 @@ export default function Scanner() {
               </div>
 
               {error ? <p className="mt-3 text-sm text-error">{error}</p> : null}
+
               {isLoadingSavedReport ? (
                 <p className="mt-2 text-xs text-on-surface-variant">
                   Loading saved report...
@@ -331,11 +368,17 @@ export default function Scanner() {
             <Card variant="glass" className="p-6 border border-outline-variant/20">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="font-display text-2xl font-extrabold text-on-surface">Structured Prescription Report</h2>
+                  <h2 className="font-display text-2xl font-extrabold text-on-surface">
+                    Structured Prescription Report
+                  </h2>
+
                   <p className="text-sm text-on-surface-variant mt-1">
-                    {scanData ? `Report ID: #RX-${scanData.prescriptionId}` : 'Upload and scan to generate a patient-friendly report'}
+                    {scanData
+                      ? `Report ID: #RX-${scanData.prescriptionId}`
+                      : 'Upload and scan to generate a patient-friendly report'}
                   </p>
                 </div>
+
                 <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase">
                   Confidence: {confidenceLabel}
                 </span>
@@ -354,20 +397,39 @@ export default function Scanner() {
 
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Doctor Name</p>
-                  <p className="font-semibold text-on-surface">{safeText(scanData?.analysis?.doctorName)}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">
+                    Doctor Name
+                  </p>
+                  <p className="font-semibold text-on-surface">
+                    {safeText(scanData?.analysis?.doctorName)}
+                  </p>
                 </div>
+
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Specialization</p>
-                  <p className="font-semibold text-on-surface">{safeText(scanData?.analysis?.doctorSpecialization)}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">
+                    Specialization
+                  </p>
+                  <p className="font-semibold text-on-surface">
+                    {safeText(scanData?.analysis?.doctorSpecialization)}
+                  </p>
                 </div>
+
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Clinic / Hospital</p>
-                  <p className="font-semibold text-on-surface">{safeText(scanData?.analysis?.clinicName)}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">
+                    Clinic / Hospital
+                  </p>
+                  <p className="font-semibold text-on-surface">
+                    {safeText(scanData?.analysis?.clinicName)}
+                  </p>
                 </div>
+
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/20">
-                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Date</p>
-                  <p className="font-semibold text-on-surface">{safeText(scanData?.analysis?.prescriptionDate)}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">
+                    Date
+                  </p>
+                  <p className="font-semibold text-on-surface">
+                    {safeText(scanData?.analysis?.prescriptionDate)}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -381,31 +443,79 @@ export default function Scanner() {
               {medicineCards.length ? (
                 <div className="space-y-4">
                   {medicineCards.map((medicine) => (
-                    <div key={`${medicine.name}-${medicine.dosage || 'dose'}`} className="rounded-2xl p-5 bg-surface-container-low border border-outline-variant/20">
+                    <div
+                      key={`${medicine.name}-${medicine.dosage || 'dose'}`}
+                      className="rounded-2xl p-5 bg-surface-container-low border border-outline-variant/20"
+                    >
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <p className="font-display font-extrabold text-lg text-on-surface">{medicine.name}</p>
-                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary">Medicine</span>
+                        <p className="font-display font-extrabold text-lg text-on-surface">
+                          {medicine.name}
+                        </p>
+
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary">
+                          Medicine
+                        </span>
                       </div>
 
                       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <p><span className="font-semibold text-on-surface">Salt / Generic:</span> <span className="text-on-surface-variant">{medicine.saltGeneric || 'Not clearly identified'}</span></p>
-                        <p><span className="font-semibold text-on-surface">Dosage:</span> <span className="text-on-surface-variant">{medicine.dosage || 'Not clearly identified'}</span></p>
-                        <p><span className="font-semibold text-on-surface">Frequency:</span> <span className="text-on-surface-variant">{medicine.frequency || 'Not clearly identified'}</span></p>
-                        <p><span className="font-semibold text-on-surface">Duration:</span> <span className="text-on-surface-variant">{medicine.duration || 'Not clearly identified'}</span></p>
-                        <p><span className="font-semibold text-on-surface">Before/After Food:</span> <span className="text-on-surface-variant">{medicine.foodTiming || 'Not clearly identified'}</span></p>
-                        <p><span className="font-semibold text-on-surface">Used for:</span> <span className="text-on-surface-variant">{medicine.purposeSimple || 'Not clearly identified'}</span></p>
+                        <p>
+                          <span className="font-semibold text-on-surface">Salt / Generic:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.saltGeneric || 'Not clearly identified'}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-semibold text-on-surface">Dosage:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.dosage || 'Not clearly identified'}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-semibold text-on-surface">Frequency:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.frequency || 'Not clearly identified'}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-semibold text-on-surface">Duration:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.duration || 'Not clearly identified'}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-semibold text-on-surface">Before/After Food:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.foodTiming || 'Not clearly identified'}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-semibold text-on-surface">Used for:</span>{' '}
+                          <span className="text-on-surface-variant">
+                            {medicine.purposeSimple || 'Not clearly identified'}
+                          </span>
+                        </p>
                       </div>
 
                       {medicine.instructions ? (
                         <div className="mt-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20 p-3 text-sm text-on-surface-variant">
-                          <span className="font-semibold text-on-surface">Simple take instruction:</span> {medicine.instructions}
+                          <span className="font-semibold text-on-surface">
+                            Simple take instruction:
+                          </span>{' '}
+                          {medicine.instructions}
                         </div>
                       ) : null}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-on-surface-variant">No medicines were confidently identified.</p>
+                <p className="text-sm text-on-surface-variant">
+                  No medicines were confidently identified.
+                </p>
               )}
             </Card>
 
@@ -414,12 +524,17 @@ export default function Scanner() {
                 <Icon name="diagnosis" className="h-5 w-5 text-primary" />
                 Possible Health Condition
               </h3>
+
               <p className="text-on-surface text-base font-semibold">
-                {scanData?.analysis?.likelyCondition || scanData?.analysis?.likelyIndication || 'Condition could not be inferred clearly.'}
+                {scanData?.analysis?.likelyCondition ||
+                  scanData?.analysis?.likelyIndication ||
+                  'Condition could not be inferred clearly.'}
               </p>
+
               <p className="mt-3 text-sm text-on-surface-variant">
                 This is an AI-generated assumption and not a confirmed diagnosis.
               </p>
+
               {scanData?.analysis?.patientFriendlyInterpretation ? (
                 <div className="mt-4 rounded-2xl bg-primary/5 border border-primary/20 p-4 text-sm text-on-surface-variant whitespace-pre-wrap">
                   {scanData.analysis.patientFriendlyInterpretation}
@@ -432,22 +547,34 @@ export default function Scanner() {
                 <Icon name="sync" className="h-5 w-5 text-primary" />
                 Medicine Alternatives
               </h3>
+
               {scanData?.analysis?.medicineAlternatives?.length ? (
                 <div className="space-y-3">
                   {scanData.analysis.medicineAlternatives.map((row, index) => (
-                    <div key={`${row.forMedicine || 'alt'}-${index}`} className="rounded-2xl p-4 bg-surface-container-low border border-outline-variant/20">
+                    <div
+                      key={`${row.forMedicine || 'alt'}-${index}`}
+                      className="rounded-2xl p-4 bg-surface-container-low border border-outline-variant/20"
+                    >
                       <p className="font-semibold text-on-surface">
                         For: {row.forMedicine || 'Prescription medicine'}
                       </p>
+
                       <p className="text-sm text-on-surface-variant mt-1">
                         {(row.alternatives || []).join(', ') || 'No clear alternative identified'}
                       </p>
-                      {row.note ? <p className="text-xs text-on-surface-variant mt-2">{row.note}</p> : null}
+
+                      {row.note ? (
+                        <p className="text-xs text-on-surface-variant mt-2">
+                          {row.note}
+                        </p>
+                      ) : null}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-on-surface-variant">No alternatives identified.</p>
+                <p className="text-sm text-on-surface-variant">
+                  No alternatives identified.
+                </p>
               )}
             </Card>
 
@@ -456,6 +583,7 @@ export default function Scanner() {
                 <Icon name="warning_amber" className="h-5 w-5 text-error" />
                 Important Warnings
               </h3>
+
               <div className="space-y-2">
                 {warnings.map((warning) => (
                   <p key={warning} className="text-sm text-on-surface-variant">
@@ -467,7 +595,20 @@ export default function Scanner() {
           </div>
         </div>
       </main>
-      <PermanentChatbot />
     </>
+  );
+}
+
+export default function Scanner() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-on-surface">
+          Loading scanner...
+        </div>
+      }
+    >
+      <ScannerContent />
+    </Suspense>
   );
 }
