@@ -60,6 +60,7 @@ type FormState = {
   pregnancy: boolean;
   breastfeeding: boolean;
   chronicConditions: string[];
+  otherCondition: string;
 };
 
 type Activity = {
@@ -125,11 +126,15 @@ function parseMedicalHistory(history: string | null) {
 }
 
 function composeMedicalHistory(form: FormState) {
+  const filtered = form.chronicConditions.filter((c) => c !== 'Other');
+  const allConditions = form.otherCondition.trim()
+    ? [...filtered, form.otherCondition.trim()]
+    : filtered;
   return [
     `Allergy Reaction: ${form.allergyReaction || 'Not specified'}`,
     `Pregnancy: ${form.pregnancy ? 'Yes' : 'No'}`,
     `Breastfeeding: ${form.breastfeeding ? 'Yes' : 'No'}`,
-    `Chronic Conditions: ${form.chronicConditions.length ? form.chronicConditions.join(', ') : 'None'}`,
+    `Chronic Conditions: ${allConditions.length ? allConditions.join(', ') : 'None'}`,
   ].join('\n');
 }
 
@@ -177,6 +182,7 @@ const emptyForm: FormState = {
   pregnancy: false,
   breastfeeding: false,
   chronicConditions: [],
+  otherCondition: '',
 };
 
 export default function ProfilePage() {
@@ -194,6 +200,7 @@ export default function ProfilePage() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [showOtherCondition, setShowOtherCondition] = useState(false);
 
   const hydrateFromProfile = useCallback((profile: ProfileApiPayload['data']) => {
     const meds = parseList(profile?.current_medicines);
@@ -211,9 +218,15 @@ export default function ProfilePage() {
       pregnancy: meta.pregnancy,
       breastfeeding: meta.breastfeeding,
       chronicConditions: meta.chronicConditions.filter((item) =>
-        chronicConditionOptions.includes(item)
+        chronicConditionOptions.includes(item) && item !== 'Other'
       ),
+      otherCondition: (meta.chronicConditions.find(
+        (item) => !chronicConditionOptions.includes(item) || item === 'Other'
+      ) || ''),
     });
+    setShowOtherCondition(meta.chronicConditions.some(
+      (item) => !chronicConditionOptions.includes(item)
+    ));
     setLastUpdatedAt(profile?.updated_at || null);
     setAvatarUrl(profile?.avatar_url || null);
   }, []);
@@ -605,8 +618,13 @@ export default function ProfilePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {form.chronicConditions.length ? (
-                  form.chronicConditions.map((condition, index) => (
+                {(
+                  form.chronicConditions.some((c) => c !== 'Other') || form.otherCondition.trim()
+                ) ? (
+                (form.otherCondition.trim()
+                  ? [...form.chronicConditions.filter((c) => c !== 'Other'), form.otherCondition.trim()]
+                  : form.chronicConditions.filter((c) => c !== 'Other')
+                ).map((condition, index) => (
                     <div
                       key={condition}
                       className={`p-5 rounded-xl bg-surface-container-low border-l-4 ${
@@ -893,6 +911,27 @@ export default function ProfilePage() {
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {chronicConditionOptions.map((condition) => {
+                    if (condition === 'Other') {
+                      return (
+                        <button
+                          key={condition}
+                          type="button"
+                          onClick={() => {
+                            setShowOtherCondition((prev) => !prev);
+                            if (showOtherCondition) {
+                              setForm((prev) => ({ ...prev, otherCondition: '' }));
+                            }
+                          }}
+                          className={`px-3 py-2 rounded-full text-sm border transition-all ${
+                            showOtherCondition
+                              ? 'border-primary bg-primary/10 text-primary font-semibold'
+                              : 'border-outline-variant hover:border-primary'
+                          }`}
+                        >
+                          {condition}
+                        </button>
+                      );
+                    }
                     const selected = form.chronicConditions.includes(condition);
                     return (
                       <button
@@ -910,6 +949,20 @@ export default function ProfilePage() {
                     );
                   })}
                 </div>
+                {showOtherCondition && (
+                  <div className="mt-3">
+                    <input
+                      id="other-condition-input"
+                      type="text"
+                      value={form.otherCondition}
+                      onChange={(e) =>
+                        setForm((prev) => ({ ...prev, otherCondition: e.target.value }))
+                      }
+                      placeholder="Type your condition..."
+                      className="w-full px-4 py-3 bg-surface-container-high rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-2">
