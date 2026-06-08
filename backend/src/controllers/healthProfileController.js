@@ -17,7 +17,7 @@ function parseJsonList(value) {
 }
 
 function getAvatarUrl(req, profile) {
-  if (!profile || !profile.avatar_path) return null;
+  if (!req || !profile || !profile.avatar_path) return null;
   const baseUrl = `${req.protocol}://${req.get('host')}`;
   return `${baseUrl}/uploads/${profile.avatar_path}`;
 }

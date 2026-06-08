@@ -34,7 +34,7 @@ const generateRecommendations = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Symptom record not found');
   }
 
-  const profile = normalizeProfile(await HealthProfileModel.getByUserId(req.user.userId));
+  const profile = normalizeProfile(await HealthProfileModel.getByUserId(req.user.userId), req);
   const normalizedSymptom = normalizeSymptomRow(symptom);
 
   const result = await buildRecommendations({
