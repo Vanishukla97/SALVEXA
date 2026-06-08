@@ -98,8 +98,36 @@ async function deleteByUserId(userId) {
   }
 }
 
+async function setAvatarPath(userId, avatarPath) {
+  await pool.execute(
+    `UPDATE health_profile SET avatar_path = ? WHERE user_id = ?`,
+    [avatarPath, userId]
+  );
+}
+
+async function clearMedicalHistory(userId) {
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    await connection.execute(
+      `UPDATE health_profile SET weight = NULL, height = NULL, age = NULL, gender = NULL, medical_history = NULL, allergies = NULL, current_medicines = NULL WHERE user_id = ?`,
+      [userId]
+    );
+    await connection.execute('DELETE FROM profile_allergies WHERE user_id = ?', [userId]);
+    await connection.execute('DELETE FROM profile_current_medicines WHERE user_id = ?', [userId]);
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+}
+
 module.exports = {
   getByUserId,
   upsertByUserId,
   deleteByUserId,
+  setAvatarPath,
+  clearMedicalHistory,
 };

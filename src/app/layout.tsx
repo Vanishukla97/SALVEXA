@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { AppFooter } from "../components/layout/AppFooter";
 import { UserSettingsProvider } from "../components/providers/UserSettingsProvider";
+import { I18nProvider } from "../lib/i18n";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -41,8 +42,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-surface text-on-surface">
         <UserSettingsProvider>
-          {children}
-          <AppFooter />
+          <I18nProvider>
+            {children}
+            <AppFooter />
+          </I18nProvider>
         </UserSettingsProvider>
       </body>
     </html>

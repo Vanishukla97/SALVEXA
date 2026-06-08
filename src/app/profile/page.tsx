@@ -27,6 +27,7 @@ type ProfileApiPayload = {
     allergies?: unknown;
     current_medicines?: unknown;
     updated_at?: string | null;
+    avatar_url?: string | null;
   } | null;
 };
 
@@ -191,6 +192,8 @@ export default function ProfilePage() {
   const [lastUpdatedAt, setLastUpdatedAt] = useState<string | null>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const hydrateFromProfile = useCallback((profile: ProfileApiPayload['data']) => {
     const meds = parseList(profile?.current_medicines);
@@ -212,7 +215,29 @@ export default function ProfilePage() {
       ),
     });
     setLastUpdatedAt(profile?.updated_at || null);
+    setAvatarUrl(profile?.avatar_url || null);
   }, []);
+
+  const handleAvatarUpload = async (file: File) => {
+    const token = getAuthToken();
+    if (!token) return;
+    setIsUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      const result = await fetchApiJson<{ success?: boolean; data?: { avatar_url?: string } }>(
+        '/profile/avatar',
+        { token, method: 'POST', body: formData, isFormData: true }
+      );
+      if (result.response.ok && result.payload?.success && result.payload.data?.avatar_url) {
+        setAvatarUrl(result.payload.data.avatar_url);
+      }
+    } catch {
+      // silent
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
 
   const loadData = useCallback(async () => {
     const token = getAuthToken();
@@ -406,20 +431,30 @@ export default function ProfilePage() {
         <section className="mb-12 relative overflow-hidden rounded-3xl bg-surface-container-low p-6 md:p-10 border border-outline-variant/10 animate-slide-up">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-surface-container-high">
-                <img
-                  alt="Profile avatar"
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=300&q=80"
-                />
+              <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-surface-container-high flex items-center justify-center">
+                {avatarUrl ? (
+                  <img
+                    alt="Profile avatar"
+                    className="w-full h-full object-cover"
+                    src={avatarUrl}
+                  />
+                ) : (
+                  <Icon name="person" className="h-16 w-16 text-on-surface-variant/50" />
+                )}
               </div>
-              <button
-                type="button"
-                onClick={() => setIsEditing(true)}
-                className="absolute bottom-0 right-0 p-2 bg-hero-gradient text-white rounded-full shadow-lg hover:scale-105 transition-transform"
-              >
-                <Icon name="edit" className="h-4 w-4" />
-              </button>
+              <label className="absolute bottom-0 right-0 p-2 bg-hero-gradient text-white rounded-full shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={isUploadingAvatar}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) void handleAvatarUpload(file);
+                  }}
+                />
+                <Icon name={isUploadingAvatar ? 'sync' : 'edit'} className="h-4 w-4" />
+              </label>
             </div>
 
             <div className="flex-1 text-center md:text-left">

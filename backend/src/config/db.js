@@ -104,6 +104,30 @@ async function ensurePrescriptionAnalysisColumn() {
   }
 }
 
+async function ensureProfileAvatarColumn() {
+  const [tables] = await pool.execute(
+    `SELECT TABLE_NAME
+     FROM INFORMATION_SCHEMA.TABLES
+     WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'health_profile'`,
+    [env.db.name]
+  );
+  if (!tables.length) {
+    return;
+  }
+
+  const [rows] = await pool.execute(
+    `SELECT COLUMN_NAME
+     FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'health_profile' AND COLUMN_NAME = 'avatar_path'`,
+    [env.db.name]
+  );
+  if (!rows.length) {
+    await pool.execute(
+      'ALTER TABLE health_profile ADD COLUMN avatar_path VARCHAR(255) NULL AFTER current_medicines'
+    );
+  }
+}
+
 async function ensureUserSettingsTable() {
   const [tables] = await pool.execute(
     `SELECT TABLE_NAME
@@ -137,6 +161,7 @@ async function runDbMigrations() {
   await ensureNotificationsTable();
   await ensurePrescriptionAnalysisColumn();
   await ensureUserSettingsTable();
+  await ensureProfileAvatarColumn();
 }
 
 module.exports = { pool, testConnection, runDbMigrations };

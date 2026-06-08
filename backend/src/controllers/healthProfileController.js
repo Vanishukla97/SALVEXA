@@ -16,10 +16,17 @@ function parseJsonList(value) {
   return [];
 }
 
-function normalizeProfile(profile) {
+function getAvatarUrl(req, profile) {
+  if (!profile || !profile.avatar_path) return null;
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  return `${baseUrl}/uploads/${profile.avatar_path}`;
+}
+
+function normalizeProfile(profile, req) {
   if (!profile) return null;
   return {
     ...profile,
+    avatar_url: getAvatarUrl(req, profile),
     allergies: parseJsonList(profile.allergies),
     current_medicines: parseJsonList(profile.current_medicines),
   };
@@ -40,7 +47,7 @@ const upsertProfile = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'Health profile saved',
-    data: normalizeProfile(updated),
+    data: normalizeProfile(updated, req),
   });
 });
 
@@ -48,7 +55,7 @@ const getProfile = asyncHandler(async (req, res) => {
   const profile = await HealthProfileModel.getByUserId(req.user.userId);
   return res.status(200).json({
     success: true,
-    data: normalizeProfile(profile),
+    data: normalizeProfile(profile, req),
   });
 });
 
@@ -60,9 +67,33 @@ const deleteProfile = asyncHandler(async (req, res) => {
   });
 });
 
+const uploadAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: 'No file uploaded' });
+  }
+  const avatarPath = req.file.filename;
+  await HealthProfileModel.setAvatarPath(req.user.userId, avatarPath);
+  const profile = await HealthProfileModel.getByUserId(req.user.userId);
+  return res.status(200).json({
+    success: true,
+    message: 'Avatar uploaded',
+    data: { avatar_url: getAvatarUrl(req, profile) },
+  });
+});
+
+const clearMedicalHistory = asyncHandler(async (req, res) => {
+  await HealthProfileModel.clearMedicalHistory(req.user.userId);
+  return res.status(200).json({
+    success: true,
+    message: 'Medical history cleared',
+  });
+});
+
 module.exports = {
   upsertProfile,
   getProfile,
   deleteProfile,
+  uploadAvatar,
+  clearMedicalHistory,
   normalizeProfile,
 };

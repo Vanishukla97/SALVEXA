@@ -15,14 +15,39 @@ export default function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!value) return 'Email is required';
+    if (!emailRegex.test(value)) return 'Please enter a valid email address';
+    return '';
+  };
+
+  const validatePassword = (value: string) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_]).{8,}$/;
+    if (!value) return 'Password is required';
+    if (value.length < 8) return 'Password must be at least 8 characters';
+    if (!passwordRegex.test(value)) return 'Must include uppercase, lowercase, number & special character';
+    return '';
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
+
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+    setEmailError(emailErr);
+    setPasswordError(passwordErr);
+    if (emailErr || passwordErr) return;
 
     if (password !== confirmPassword) {
       setError('Password and confirm password do not match.');
@@ -114,31 +139,35 @@ export default function SignupPage() {
                   label="Email"
                   placeholder="you@example.com"
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => { setEmail(event.target.value); setEmailError(''); }}
+                  error={emailError}
                   required
                 />
 
                 <Input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   label="Password"
-                  placeholder="Minimum 6 characters"
+                  placeholder="Minimum 8 characters"
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  minLength={6}
+                  onChange={(event) => { setPassword(event.target.value); setPasswordError(''); }}
+                  rightIcon={showPassword ? 'visibility_off' : 'visibility'}
+                  onRightIconClick={() => setShowPassword((prev) => !prev)}
+                  error={passwordError}
                   required
                 />
 
                 <Input
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   label="Confirm Password"
                   placeholder="Re-enter password"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
-                  minLength={6}
+                  rightIcon={showConfirmPassword ? 'visibility_off' : 'visibility'}
+                  onRightIconClick={() => setShowConfirmPassword((prev) => !prev)}
                   required
                 />
 

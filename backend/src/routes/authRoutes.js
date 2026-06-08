@@ -18,7 +18,9 @@ router.post(
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_])/)
+      .withMessage('Password must include uppercase, lowercase, number & special character'),
     body('acceptTerms')
       .custom((value) => value === true)
       .withMessage('Accept Terms & Conditions and Medical Disclaimer to continue'),

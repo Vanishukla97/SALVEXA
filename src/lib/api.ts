@@ -6,6 +6,7 @@ type ApiRequestOptions = {
   body?: unknown;
   headers?: Record<string, string>;
   credentials?: RequestCredentials;
+  isFormData?: boolean;
 };
 
 async function tryFetchFromBase(
@@ -16,13 +17,17 @@ async function tryFetchFromBase(
   const headers: Record<string, string> = { ...(options.headers || {}) };
   if (options.token) headers.Authorization = `Bearer ${options.token}`;
   const hasBody = options.body !== undefined;
-  if (hasBody && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+
+  const isFormData = options.isFormData || false;
+  if (hasBody && !isFormData && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   const response = await fetch(`${baseUrl}${path}`, {
     method: options.method || 'GET',
     headers,
     credentials: options.credentials || 'include',
-    body: hasBody ? JSON.stringify(options.body) : undefined,
+    body: hasBody ? (isFormData ? (options.body as FormData) : JSON.stringify(options.body)) : undefined,
   });
   return response;
 }

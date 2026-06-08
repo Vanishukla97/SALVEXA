@@ -4,9 +4,12 @@ const {
   upsertProfile,
   getProfile,
   deleteProfile,
+  uploadAvatar,
+  clearMedicalHistory,
 } = require('../controllers/healthProfileController');
 const { authenticate } = require('../middleware/authMiddleware');
 const { validateRequest } = require('../middleware/validateRequest');
+const { upload } = require('../middleware/uploadMiddleware');
 
 const router = express.Router();
 
@@ -41,5 +44,9 @@ router.put(
 );
 
 router.delete('/', deleteProfile);
+
+router.post('/avatar', upload.single('avatar'), uploadAvatar);
+
+router.delete('/medical-history', clearMedicalHistory);
 
 module.exports = router;

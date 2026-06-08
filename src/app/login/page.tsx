@@ -24,8 +24,10 @@ function LoginContent() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [token, setToken] = useState('');
@@ -43,9 +45,24 @@ function LoginContent() {
     }
   }, [searchParams]);
 
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!value) return 'Email is required';
+    if (!emailRegex.test(value)) return 'Please enter a valid email address';
+    return '';
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
+
+    const emailErr = validateEmail(email);
+    setEmailError(emailErr);
+    if (emailErr) {
+      setIsSubmitting(false);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -207,18 +224,21 @@ function LoginContent() {
                   label="Email"
                   placeholder="doctor@clinic.com"
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => { setEmail(event.target.value); setEmailError(''); }}
+                  error={emailError}
                   required
                 />
 
                 <Input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   label="Password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
+                  rightIcon={showPassword ? 'visibility_off' : 'visibility'}
+                  onRightIconClick={() => setShowPassword((prev) => !prev)}
                   required
                 />
 

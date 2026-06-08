@@ -14,6 +14,8 @@ import {
   type UserSettings,
 } from '../../lib/userSettings';
 import { useUserSettings } from '../../components/providers/UserSettingsProvider';
+import { languages } from '../../lib/i18n/languages';
+import { useI18n } from '../../lib/i18n';
 
 type SettingsPanel = 'general' | 'security' | 'alerts' | 'data_log';
 
@@ -53,6 +55,7 @@ function Toggle({
 export default function SettingsPage() {
   const router = useRouter();
   const { setSettings: setGlobalSettings } = useUserSettings();
+  const { t, setLocale } = useI18n();
 
   const [activePanel, setActivePanel] = useState<SettingsPanel>('general');
   const [isLoading, setIsLoading] = useState(true);
@@ -92,12 +95,13 @@ export default function SettingsPage() {
       setSavedSnapshot(normalized);
       setDraft(normalized);
       setGlobalSettings(normalized);
+      setLocale(normalized.interfaceLanguage);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to load settings');
     } finally {
       setIsLoading(false);
     }
-  }, [router, setGlobalSettings]);
+  }, [router, setGlobalSettings, setLocale]);
 
   useEffect(() => {
     void loadSettings();
@@ -112,7 +116,8 @@ export default function SettingsPage() {
     if (!savedSnapshot.updatedAt) return 'Not saved yet';
     const dt = new Date(savedSnapshot.updatedAt);
     if (Number.isNaN(dt.getTime())) return 'Not saved yet';
-    return dt.toLocaleString(draft.interfaceLanguage || 'en-US', {
+    const localeForDate = draft.interfaceLanguage === 'en' ? 'en-US' : draft.interfaceLanguage;
+    return dt.toLocaleString(localeForDate, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -174,11 +179,41 @@ export default function SettingsPage() {
       setSavedSnapshot(normalized);
       setDraft(normalized);
       setGlobalSettings(normalized);
+      setLocale(normalized.interfaceLanguage);
       setSuccess('Preferences saved and applied successfully.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to save settings');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeletingMedical, setIsDeletingMedical] = useState(false);
+
+  const handleDeleteMedicalHistory = async () => {
+    const token = getAuthToken();
+    if (!token) {
+      clearAuthSession();
+      router.replace('/login');
+      return;
+    }
+    setIsDeletingMedical(true);
+    setError('');
+    try {
+      const result = await fetchApiJson<{ success?: boolean; message?: string }>(
+        '/profile/medical-history',
+        { token, method: 'DELETE' }
+      );
+      if (!result.response.ok || !result.payload?.success) {
+        throw new Error(result.payload?.message || 'Failed to delete medical history');
+      }
+      setShowDeleteConfirm(false);
+      setSuccess('Medical history has been cleared successfully.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to delete medical history');
+    } finally {
+      setIsDeletingMedical(false);
     }
   };
 
@@ -274,11 +309,11 @@ export default function SettingsPage() {
                     onChange={(event) => setDraftField('interfaceLanguage', event.target.value)}
                     className="w-full bg-surface-container-high border-none border-r-8 border-transparent rounded-xl py-4 px-5 outline-none appearance-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium transition-all duration-300"
                   >
-                    <option value="en-US">English (United States)</option>
-                    <option value="en-IN">English (India)</option>
-                    <option value="es-ES">Spanish (ES)</option>
-                    <option value="fr-FR">French (FR)</option>
-                    <option value="de-DE">German (DE)</option>
+                    {languages.map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.nativeName} ({lang.name})
+                      </option>
+                    ))}
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                     <Icon name="expand_more" className="h-5 w-5 text-on-surface-variant" />
@@ -429,13 +464,17 @@ export default function SettingsPage() {
                     <Icon name="chevron_right" className="h-5 w-5 text-on-surface-variant" />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low">
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all"
+                  >
                     <div className="flex items-center space-x-3 text-error">
                       <Icon name="delete_forever" className="h-5 w-5" />
                       <span className="font-medium">Delete Medical History</span>
                     </div>
                     <Icon name="chevron_right" className="h-5 w-5 text-error" />
-                  </div>
+                  </button>
                 </div>
               </Card>
               ) : null}
@@ -497,6 +536,38 @@ export default function SettingsPage() {
           </div>
         )}
       </main>
+
+      {showDeleteConfirm ? (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-md rounded-2xl bg-surface-container-lowest border border-outline-variant/20 shadow-2xl p-6 animate-slide-up">
+            <h3 className="text-xl font-bold font-display text-on-surface mb-3">
+              Delete Medical History
+            </h3>
+            <p className="text-sm text-on-surface-variant mb-6">
+              Are you sure you want to delete your entire medical history? This action cannot be undone.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="tertiary"
+                type="button"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeletingMedical}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="danger"
+                type="button"
+                onClick={() => void handleDeleteMedicalHistory()}
+                disabled={isDeletingMedical}
+              >
+                {isDeletingMedical ? 'Deleting...' : 'Yes, Delete Everything'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

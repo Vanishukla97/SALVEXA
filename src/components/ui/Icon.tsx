@@ -305,6 +305,21 @@ export function Icon({ name, className = '', ...props }: IconProps) {
           <path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18" strokeLinecap="round" />
         </svg>
       );
+    case 'visibility':
+      return (
+        <svg {...baseProps}>
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      );
+    case 'visibility_off':
+      return (
+        <svg {...baseProps}>
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="12" cy="12" r="3" />
+          <path d="M4 4l16 16" strokeLinecap="round" />
+        </svg>
+      );
     case 'expand_more':
       return (
         <svg {...baseProps}>

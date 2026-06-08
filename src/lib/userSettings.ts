@@ -9,7 +9,7 @@ export type UserSettings = {
 };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
-  interfaceLanguage: 'en-US',
+  interfaceLanguage: 'en',
   medicationReminders: true,
   symptomTrackingAlerts: true,
   weeklyHealthReports: false,
