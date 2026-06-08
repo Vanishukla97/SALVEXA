@@ -17,7 +17,9 @@ router.post(
   '/register',
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
-    body('email').isEmail().withMessage('Valid email is required'),
+    body('email').isEmail().withMessage('Valid email is required')
+      .matches(/^[^\s@]+@[a-zA-Z][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/)
+      .withMessage('Email domain must start with a letter'),
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_])/)
       .withMessage('Password must include uppercase, lowercase, number & special character'),
@@ -32,7 +34,9 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Valid email is required'),
+    body('email').isEmail().withMessage('Valid email is required')
+      .matches(/^[^\s@]+@[a-zA-Z][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/)
+      .withMessage('Email domain must start with a letter'),
     body('password').notEmpty().withMessage('Password is required'),
     body('rememberMe').optional().isBoolean().withMessage('rememberMe must be boolean'),
   ],

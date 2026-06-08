@@ -46,7 +46,7 @@ function LoginContent() {
   }, [searchParams]);
 
   const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[a-zA-Z][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}$/;
     if (!value) return 'Email is required';
     if (!emailRegex.test(value)) return 'Please enter a valid email address';
     return '';
