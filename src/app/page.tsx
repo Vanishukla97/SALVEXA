@@ -10,7 +10,7 @@ export default function Home() {
       <Navbar />
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative min-h-[921px] flex items-center overflow-hidden bg-surface-container-low">
+        <section className="relative min-h-screen lg:min-h-[921px] flex items-center overflow-hidden bg-surface-container-low">
           <div className="absolute inset-0 z-0">
             <img 
               className="w-full h-full object-cover opacity-20 mix-blend-overlay" 

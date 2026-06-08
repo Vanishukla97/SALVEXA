@@ -71,6 +71,7 @@ export function Navbar() {
   const emergencyAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showEmergencyAlert, setShowEmergencyAlert] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('Account');
@@ -242,6 +243,7 @@ export function Navbar() {
     } finally {
       clearAuthSession();
       setMenuOpen(false);
+      setMobileNavOpen(false);
       setNotificationsOpen(false);
       setIsAuthenticated(false);
       router.push('/login');
@@ -413,6 +415,14 @@ export function Navbar() {
             </div>
 
             <div className="relative z-10 flex items-center justify-end gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen((prev) => !prev)}
+                className="md:hidden inline-flex items-center justify-center p-2 rounded-xl hover:bg-surface-container-high transition-transform active:scale-95"
+                aria-label="Open navigation menu"
+              >
+                <Icon name={mobileNavOpen ? 'close' : 'menu'} className="h-6 w-6 text-white" />
+              </button>
               <div className="hidden lg:block relative" ref={notificationRef}>
                 <button
                   type="button"
@@ -627,6 +637,7 @@ export function Navbar() {
                   void triggerEmergencyNotifications();
                   void loadUnreadCount();
                   startEmergencyAlertTone();
+                  setMobileNavOpen(false);
                   setShowEmergencyAlert(true);
                 }}
               >
@@ -636,6 +647,51 @@ export function Navbar() {
           </div>
         </nav>
       </header>
+
+      {mobileNavOpen ? (
+        <div className="md:hidden fixed inset-0 z-[100]">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileNavOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full w-72 bg-surface-container-lowest shadow-2xl overflow-y-auto animate-slide-in-left">
+            <div className="p-6 space-y-1">
+              {navItems.map((item) => {
+                const isActive = activeHref === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileNavOpen(false)}
+                    className={`block px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-on-surface hover:bg-surface-container-low'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+              <hr className="my-3 border-outline-variant/20" />
+              <Link
+                href="/profile"
+                onClick={() => setMobileNavOpen(false)}
+                className="block px-4 py-3 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-low transition-colors"
+              >
+                Profile
+              </Link>
+              <Link
+                href="/settings"
+                onClick={() => setMobileNavOpen(false)}
+                className="block px-4 py-3 rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-low transition-colors"
+              >
+                Settings
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {showEmergencyAlert ? (
         <div className="fixed inset-0 z-[120]">

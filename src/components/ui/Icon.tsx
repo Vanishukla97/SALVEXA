@@ -122,6 +122,12 @@ export function Icon({ name, className = '', ...props }: IconProps) {
           <path d="M20 20l-4-4" strokeLinecap="round" />
         </svg>
       );
+    case 'menu':
+      return (
+        <svg {...baseProps}>
+          <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
     case 'close':
       return (
         <svg {...baseProps}>
