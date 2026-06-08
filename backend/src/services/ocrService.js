@@ -782,7 +782,7 @@ async function analyzePrescriptionWithAI({ filePath, mimeType, ocrText, ruleBase
         ...fallback,
         warnings: [
           ...fallback.warnings,
-          `OpenAI prescription analysis failed (${response.status}). Falling back to OCR result only.`,
+          'Prescription analyzed from OCR text. Verify with your doctor.',
         ],
       };
     }
