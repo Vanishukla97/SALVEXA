@@ -226,48 +226,62 @@ export default function RecommendationsPage() {
             ) : null}
 
             {normalizedRecommendations.length ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {normalizedRecommendations.map((item) => (
-                  <Card
-                    key={item.id}
-                    variant="glass"
-                    className={`p-6 border-l-4 ${item.safe ? 'border-l-secondary' : 'border-l-error'}`}
-                  >
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <h3 className="text-2xl font-display font-bold text-on-surface">{item.medicineName}</h3>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          item.safe ? 'bg-secondary/15 text-secondary' : 'bg-error-container text-error'
-                        }`}
-                      >
-                        {item.safe ? 'Safety Checked' : 'Review Required'}
-                      </span>
-                    </div>
-
-                    <div className="space-y-3">
-                      <p className="text-sm text-on-surface-variant">
-                        <span className="font-semibold text-on-surface">Dosage:</span> {item.dosage}
-                      </p>
-                      <p className="text-sm text-on-surface-variant">
-                        <span className="font-semibold text-on-surface">Instructions:</span> {item.instructions}
-                      </p>
-                    </div>
-
-                    {item.warnings.length ? (
-                      <div className="mt-5 p-4 rounded-xl bg-error-container/30 border border-error/20">
-                        <p className="text-xs font-bold uppercase tracking-wider text-error mb-2">Warnings</p>
-                        <ul className="space-y-2">
-                          {item.warnings.map((warning) => (
-                            <li key={warning} className="text-sm text-on-surface-variant">
-                              {warning}
-                            </li>
-                          ))}
-                        </ul>
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {normalizedRecommendations.map((item) => (
+                    <Card
+                      key={item.id}
+                      variant="glass"
+                      className={`p-6 border-l-4 ${item.safe ? 'border-l-secondary' : 'border-l-error'}`}
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <h3 className="text-2xl font-display font-bold text-on-surface">{item.medicineName}</h3>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            item.safe ? 'bg-secondary/15 text-secondary' : 'bg-error-container text-error'
+                          }`}
+                        >
+                          {item.safe ? 'Safety Checked' : 'Review Required'}
+                        </span>
                       </div>
-                    ) : null}
-                  </Card>
-                ))}
-              </div>
+
+                      <div className="space-y-3">
+                        <p className="text-sm text-on-surface-variant">
+                          <span className="font-semibold text-on-surface">Dosage:</span> {item.dosage}
+                        </p>
+                        <p className="text-sm text-on-surface-variant">
+                          <span className="font-semibold text-on-surface">Instructions:</span> {item.instructions}
+                        </p>
+                      </div>
+
+                      {item.warnings.length ? (
+                        <div className="mt-5 p-4 rounded-xl bg-error-container/30 border border-error/20">
+                          <p className="text-xs font-bold uppercase tracking-wider text-error mb-2">Warnings</p>
+                          <ul className="space-y-2">
+                            {item.warnings.map((warning) => (
+                              <li key={warning} className="text-sm text-on-surface-variant">
+                                {warning}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </Card>
+                  ))}
+                </div>
+
+                <div className="flex justify-center pt-4">
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    className="flex items-center gap-2"
+                    onClick={() => router.push('/symptoms')}
+                  >
+                    <Icon name="monitoring" className="h-4 w-4" />
+                    Recheck Symptoms
+                  </Button>
+                </div>
+              </>
             ) : (
               <Card variant="glass" className="p-8">
                 <h3 className="font-display font-bold text-2xl mb-2">No medicine recommendation returned</h3>
