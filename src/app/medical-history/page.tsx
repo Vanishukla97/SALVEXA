@@ -127,7 +127,16 @@ export default function MedicalHistoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [historyCards, setHistoryCards] = useState<HistoryCard[]>([]);
-  const [completedIds, setCompletedIds] = useState<number[]>([]);
+  const [completedIds, setCompletedIds] = useState<number[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const stored = localStorage.getItem('salvexa_completed_history_ids');
+    if (!stored) return [];
+    try { return JSON.parse(stored); } catch { return []; }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('salvexa_completed_history_ids', JSON.stringify(completedIds));
+  }, [completedIds]);
 
   useEffect(() => {
     const token = getAuthToken();
