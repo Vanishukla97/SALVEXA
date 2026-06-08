@@ -437,10 +437,15 @@ export default function ProfilePage() {
                     alt="Profile avatar"
                     className="w-full h-full object-cover"
                     src={avatarUrl}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).parentElement!.querySelector('.avatar-fallback')?.classList.remove('hidden');
+                    }}
                   />
-                ) : (
+                ) : null}
+                <div className={`w-full h-full flex items-center justify-center ${avatarUrl ? 'avatar-fallback hidden' : ''}`}>
                   <Icon name="person" className="h-16 w-16 text-on-surface-variant/50" />
-                )}
+                </div>
               </div>
               <label className="absolute bottom-0 right-0 p-2 bg-hero-gradient text-white rounded-full shadow-lg hover:scale-105 transition-transform cursor-pointer">
                 <input
