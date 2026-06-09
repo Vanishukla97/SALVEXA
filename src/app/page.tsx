@@ -1,10 +1,25 @@
+'use client';
+
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Navbar } from '../components/layout/Navbar';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
+import { getAuthToken } from '../lib/auth';
 import Link from 'next/link';
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleGetStarted = useCallback(() => {
+    const token = getAuthToken();
+    if (token) {
+      router.push('/symptoms');
+    } else {
+      router.push('/login');
+    }
+  }, [router]);
   return (
     <>
       <Navbar />
@@ -36,7 +51,7 @@ export default function Home() {
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
-                <Button variant="primary" size="lg">Get Started</Button>
+                <Button variant="primary" size="lg" onClick={handleGetStarted}>Get Started</Button>
                 <Button variant="secondary" size="lg">Learn More</Button>
               </div>
             </div>
