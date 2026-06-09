@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '../components/layout/Navbar';
 import { Button } from '../components/ui/Button';
@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 export default function Home() {
   const router = useRouter();
+  const [showLearnMore, setShowLearnMore] = useState(false);
 
   const handleGetStarted = useCallback(() => {
     const token = getAuthToken();
@@ -52,7 +53,7 @@ export default function Home() {
               
               <div className="flex flex-wrap gap-4 pt-4">
                 <Button variant="primary" size="lg" onClick={handleGetStarted}>Get Started</Button>
-                <Button variant="secondary" size="lg">Learn More</Button>
+                <Button variant="secondary" size="lg" onClick={() => setShowLearnMore(true)}>Learn More</Button>
               </div>
             </div>
             
@@ -151,6 +152,87 @@ export default function Home() {
         </section>
 
       </main>
+
+      {showLearnMore ? (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" onClick={() => setShowLearnMore(false)} />
+          <div className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl bg-surface-container-lowest border border-outline-variant/20 shadow-2xl p-6 sm:p-10 animate-slide-up">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-display font-extrabold text-on-surface">Learn More</h2>
+              <button
+                type="button"
+                onClick={() => setShowLearnMore(false)}
+                className="p-2 rounded-lg hover:bg-surface-container-low transition-colors"
+              >
+                <Icon name="close" className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-6 text-on-surface">
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">Your Health, Simplified</h3>
+                <p className="leading-relaxed">
+                  The AI-Based Medicine Recommendation System is designed to help users better understand their symptoms and explore possible medicine options in a simple and organized way. By combining your health information with symptom analysis, the platform provides personalized recommendations while keeping safety as a priority.
+                </p>
+              </section>
+
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">How It Works</h3>
+                <p className="mb-3">Getting started is simple:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Create your account and complete your health profile.</li>
+                  <li>Tell us what symptoms you&apos;re experiencing.</li>
+                  <li>Add details such as how long you&apos;ve had them and how severe they are.</li>
+                  <li>The system analyzes your information and provides medicine recommendations along with important usage instructions and precautions.</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">Personalized for You</h3>
+                <p className="mb-3">Everyone&apos;s health situation is different. That&apos;s why the system takes into account information such as:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Age and weight</li>
+                  <li>Medical history</li>
+                  <li>Current medications</li>
+                  <li>Allergies</li>
+                  <li>Previous surgeries</li>
+                  <li>Special conditions such as pregnancy or breastfeeding</li>
+                </ul>
+                <p className="mt-3">This helps provide recommendations that are more relevant to your individual needs.</p>
+              </section>
+
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">Prescription Scanner</h3>
+                <p className="mb-3">Have a prescription but finding it difficult to understand?</p>
+                <p>Simply upload a prescription image and the system will extract the key information and present it in a clearer, more user-friendly format. It can help you understand prescribed medicines, dosage instructions, and other important details.</p>
+              </section>
+
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">Health Dashboard</h3>
+                <p>Your health information stays organized in one place. The dashboard allows you to manage your profile, review medical history, and view health insights through easy-to-understand charts and visualizations.</p>
+              </section>
+
+              <section>
+                <h3 className="text-2xl font-display font-bold text-primary mb-3">Built with Safety in Mind</h3>
+                <p>Before displaying recommendations, the system checks for factors such as allergies, existing medications, and other health conditions. If any potential risks are detected, appropriate warnings and precautions are provided.</p>
+              </section>
+
+              <section className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <h3 className="text-xl font-display font-bold text-amber-800 mb-3">Important Note</h3>
+                <p className="text-amber-900 leading-relaxed">
+                  This platform is intended to provide general health guidance and educational information. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. For serious symptoms or medical emergencies, always consult a qualified healthcare professional.
+                </p>
+              </section>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-outline-variant/20 flex justify-end">
+              <Button variant="primary" onClick={() => setShowLearnMore(false)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
