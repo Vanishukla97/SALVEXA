@@ -654,7 +654,7 @@ export function Navbar() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileNavOpen(false)}
           />
-          <div className="absolute right-0 top-0 h-full w-72 bg-surface-container-lowest shadow-2xl overflow-y-auto animate-slide-in-left">
+          <div className="absolute left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-2xl overflow-y-auto animate-slide-in-left">
             <div className="p-6 space-y-1">
               {navItems.map((item) => {
                 const isActive = activeHref === item.href;
