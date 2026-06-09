@@ -380,18 +380,26 @@ export function Navbar() {
     <>
       <header className="fixed top-0 w-full z-50 bg-black backdrop-blur-xl shadow-ambient">
         <nav className="h-20 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-full grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-8">
-            <div className="min-w-0">
+          <div className="h-full flex items-center gap-2 lg:gap-8">
+            <div className="flex items-center gap-2 min-w-0">
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen((prev) => !prev)}
+                className="md:hidden inline-flex items-center justify-center p-2 rounded-xl hover:bg-surface-container-high transition-transform active:scale-95 shrink-0"
+                aria-label="Open navigation menu"
+              >
+                <Icon name={mobileNavOpen ? 'close' : 'menu'} className="h-6 w-6 text-white" />
+              </button>
               <Link
                 href="/"
-                className="inline-flex items-center text-xl font-black font-display tracking-wide"
+                className="inline-flex items-center text-xl font-black font-display tracking-wide shrink-0"
                 style={{ color: '#FFFFFF' }}
               >
                 SALVEXA
               </Link>
             </div>
 
-            <div className="hidden md:flex relative z-20 items-center justify-center gap-4 lg:gap-7 text-sm lg:text-base min-w-0">
+            <div className="hidden md:flex flex-1 relative z-20 items-center justify-center gap-4 lg:gap-7 text-sm lg:text-base min-w-0">
               {navItems.map((item) => {
                 const isActive = activeHref === item.href;
                 return (
@@ -414,15 +422,7 @@ export function Navbar() {
               })}
             </div>
 
-            <div className="relative z-10 flex items-center justify-end gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen((prev) => !prev)}
-                className="md:hidden inline-flex items-center justify-center p-2 rounded-xl hover:bg-surface-container-high transition-transform active:scale-95"
-                aria-label="Open navigation menu"
-              >
-                <Icon name={mobileNavOpen ? 'close' : 'menu'} className="h-6 w-6 text-white" />
-              </button>
+            <div className="relative z-10 flex items-center justify-end gap-2 sm:gap-3 flex-1 md:flex-none">
               <div className="hidden lg:block relative" ref={notificationRef}>
                 <button
                   type="button"
