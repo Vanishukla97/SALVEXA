@@ -180,9 +180,9 @@ export default function SignupPage() {
                   />
                   <span className="text-sm text-on-surface-variant">
                     I agree to{' '}
-                    <Link href="/terms" className="text-primary font-semibold hover:underline">
+                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary font-semibold hover:underline">
                       Terms & Conditions
-                    </Link>{' '}
+                    </a>{' '}
                     and Medical Disclaimer (Version {CURRENT_TERMS_VERSION}).
                   </span>
                 </label>

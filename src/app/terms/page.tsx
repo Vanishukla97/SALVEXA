@@ -75,13 +75,26 @@ function TermsPageContent() {
 
       <main className="pt-32 pb-20 px-4 md:px-6 max-w-5xl mx-auto min-h-screen">
         <section className="rounded-3xl bg-surface-container-lowest border border-outline-variant/25 p-6 md:p-10 shadow-ambient">
-          <p className="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
-            Terms Version {CURRENT_TERMS_VERSION}
-          </p>
-
-          <h1 className="mt-4 text-4xl font-display font-extrabold text-on-surface">
-            Terms & Conditions
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
+                Terms Version {CURRENT_TERMS_VERSION}
+              </p>
+              <h1 className="mt-4 text-4xl font-display font-extrabold text-on-surface">
+                Terms & Conditions
+              </h1>
+            </div>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="shrink-0 p-2 rounded-lg hover:bg-surface-container-low transition-colors"
+              aria-label="Close"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6 text-on-surface-variant">
+                <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
 
           <p className="mt-3 text-on-surface-variant">
             These Terms and Conditions govern your access to and use of this platform.
