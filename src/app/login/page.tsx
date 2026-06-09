@@ -267,9 +267,9 @@ function LoginContent() {
 
                 <p className="text-xs text-on-surface-variant text-center">
                   By continuing, you agree to{' '}
-                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary font-semibold hover:underline">
+                  <Link href="/terms" className="text-primary font-semibold hover:underline">
                     Terms & Conditions
-                  </a>{' '}
+                  </Link>{' '}
                   (Version {CURRENT_TERMS_VERSION}).
                 </p>
               </form>

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export function AppFooter() {
   return (
     <footer className="bg-surface-container-high w-full rounded-t-[2rem] mt-16">
@@ -18,14 +20,14 @@ export function AppFooter() {
           <h4 className="font-display font-bold text-on-surface">Legal</h4>
           <ul className="space-y-2">
             <li>
-              <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-sm text-primary font-semibold hover:underline">
+              <Link href="/terms" className="text-sm text-primary font-semibold hover:underline">
                 Terms of Service
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-sm text-primary font-semibold hover:underline">
+              <Link href="/privacy-policy" className="text-sm text-primary font-semibold hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
