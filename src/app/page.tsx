@@ -29,6 +29,7 @@ export default function Home() {
         <section className="relative min-h-screen lg:min-h-[921px] flex items-center overflow-hidden bg-surface-container-low">
           <div className="absolute inset-0 z-0">
             <img 
+              loading="lazy"
               className="w-full h-full object-cover opacity-20 mix-blend-overlay" 
               alt="Medical background" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlRv-7gAP_KirBCs2Q3Acj_2Z66xvh7fMGTGEpgXfMIIZ1HtrFrajyZf25nB34ItQj-aFDqKv8GUi9BAT4QqJsUliEopGykRqvoiEH2MOIga7541OiQU4i4WBi7oeHvEypqNSc4eCPL1BrNUNIhjbbTtQYjCnXGZASyl2BX_PziVQ1EEOV9QeU3bcUtaRKmynZxdOMY3VUgVGstUooXE_I5zSTq0txC-iCA1rE3_mEjP5ReaJuDyxVNQYR2KsEDjmUBhCprSIvM1Aw"
@@ -60,6 +61,7 @@ export default function Home() {
             <div className="relative hidden lg:block">
               <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-surface-container-lowest transform rotate-2">
                 <img 
+                  loading="lazy"
                   className="w-full h-auto" 
                   alt="Doctor with tablet" 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2aDNgTKQoyvYc9YM8Ejw9P5jhbLpJJgzjjKDXeMT3qkyuoegsP8B78OvqlSKErLKBZgiAa-pb9j_z5VMALY68rLRojVMufJZKeR1EEE_tjT-9fNVSJzFx0z2hCqSPgzhVhbIPSgTOtyigVs7GQXq3hTyAO7PSghpZRoP3QfOrCiURGjbX1gDsSit8SQWwa7ELEXXg2hKdY5u2WXQm2S1KcZLe4Cj8SvYvImz50fR3arB2_qIl19CVRtswKqcFV3xXRL09FENtsByZ"
@@ -143,7 +145,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="relative">
-                <img className="rounded-[3rem] shadow-2xl relative z-10" alt="App Preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE5qJsWM3VVgpHVwQPV7d0JNYT8v6cAbpFxtUxcfUXN35JMCjAK7Dkrh6YvTo_hIdnD4YuzMxpyB4njYQMydl9C3h20r1ta3-TYM8PNyM-SATzG-yVWRJjVrNdjgKG7Qc1e_-MtVZIg_FDx9k_pBokB1Q4WI2HCz9WnEx7_n5h6lY3s3X321o-8fLdIEJzub3pMAkKjRvJOnr-TV3SRJc2Ft0f0-gZ0lgaEMYThbX3SHTsgf5W-Xr_JzBtxylJRXS_eBsJup3psT8u"/>
+                <img loading="lazy" className="rounded-[3rem] shadow-2xl relative z-10" alt="App Preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE5qJsWM3VVgpHVwQPV7d0JNYT8v6cAbpFxtUxcfUXN35JMCjAK7Dkrh6YvTo_hIdnD4YuzMxpyB4njYQMydl9C3h20r1ta3-TYM8PNyM-SATzG-yVWRJjVrNdjgKG7Qc1e_-MtVZIg_FDx9k_pBokB1Q4WI2HCz9WnEx7_n5h6lY3s3X321o-8fLdIEJzub3pMAkKjRvJOnr-TV3SRJc2Ft0f0-gZ0lgaEMYThbX3SHTsgf5W-Xr_JzBtxylJRXS_eBsJup3psT8u"/>
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-secondary-container rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
                 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary-container rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
               </div>
