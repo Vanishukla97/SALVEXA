@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS notifications (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  type VARCHAR(64) NOT NULL,
+  priority ENUM('critical', 'important', 'info') NOT NULL DEFAULT 'info',
+  title VARCHAR(180) NOT NULL,
+  message VARCHAR(500) NOT NULL,
+  deep_link VARCHAR(255) NULL,
+  meta_json JSON NULL,
+  is_read TINYINT(1) NOT NULL DEFAULT 0,
+  is_hidden TINYINT(1) NOT NULL DEFAULT 0,
+  scheduled_for DATETIME NULL,
+  delivered_at DATETIME NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY idx_notifications_user_created (user_id, created_at),
+  KEY idx_notifications_user_unread (user_id, is_read, is_hidden),
+  KEY idx_notifications_schedule (scheduled_for, delivered_at),
+  CONSTRAINT fk_notifications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

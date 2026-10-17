@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS user_settings (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  interface_language VARCHAR(32) NOT NULL DEFAULT 'en-US',
+  medication_reminders TINYINT(1) NOT NULL DEFAULT 1,
+  symptom_tracking_alerts TINYINT(1) NOT NULL DEFAULT 1,
+  weekly_health_reports TINYINT(1) NOT NULL DEFAULT 0,
+  clinic_sharing_enabled TINYINT(1) NOT NULL DEFAULT 0,
+  animations_enabled TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_settings_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
