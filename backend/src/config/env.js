@@ -14,7 +14,10 @@ const env = {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     name: process.env.DB_NAME || 'salvexa',
-    ssl: process.env.DB_SSL === 'true',
+    ssl:
+      process.env.DB_SSL === 'true' ||
+      (process.env.DB_SSL !== 'false' &&
+        /tidbcloud\.com/i.test(process.env.DB_HOST || '')),
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'please_change_this_secret',
