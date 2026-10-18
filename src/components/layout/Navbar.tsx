@@ -642,7 +642,7 @@ export function Navbar() {
 
               <Button
                 variant="danger"
-                className="uppercase tracking-wider whitespace-nowrap"
+                className="uppercase tracking-wider whitespace-nowrap px-3 sm:px-6"
                 type="button"
                 onClick={() => {
                   void triggerEmergencyNotifications();
@@ -651,7 +651,8 @@ export function Navbar() {
                   setShowEmergencyAlert(true);
                 }}
               >
-                Emergency
+                <span className="sm:hidden">SOS</span>
+                <span className="hidden sm:inline">Emergency</span>
               </Button>
             </div>
           </div>

@@ -259,9 +259,9 @@ function ScannerContent() {
     <>
       <Navbar />
 
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
-        <section className="mb-12 text-center md:text-left">
-          <h1 className="font-display text-5xl font-extrabold text-on-surface tracking-tight mb-4 max-w-4xl">
+      <main className="pt-32 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+        <section className="mb-8 sm:mb-12 text-center md:text-left">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight mb-4 max-w-4xl">
             Prescription <span className="text-primary">Care Assistant</span>
           </h1>
 
@@ -278,7 +278,7 @@ function ScannerContent() {
                 <h2 className="font-display text-xl font-bold">Upload Prescription</h2>
               </div>
 
-              <label className="relative group block bg-surface-container-low rounded-3xl border-2 border-dashed border-outline-variant hover:border-primary transition-all duration-300 p-10 text-center cursor-pointer overflow-hidden">
+              <label className="relative group block bg-surface-container-low rounded-3xl border-2 border-dashed border-outline-variant hover:border-primary transition-all duration-300 p-6 sm:p-10 text-center cursor-pointer overflow-hidden">
                 <input
                   key={inputResetKey}
                   className="absolute inset-0 opacity-0 cursor-pointer z-10"

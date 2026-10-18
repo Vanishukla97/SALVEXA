@@ -260,8 +260,8 @@ export default function MedicalHistoryPage() {
     <>
       <Navbar />
       <main className="pt-32 pb-20 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
-        <header className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold font-display text-on-surface tracking-tight">
+        <header className="mb-8 sm:mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-on-surface tracking-tight">
             Medical History
           </h1>
           <p className="text-on-surface-variant mt-3 max-w-2xl text-lg">
@@ -358,7 +358,7 @@ export default function MedicalHistoryPage() {
                             card.regimen.map((item) => (
                               <div
                                 key={item.id}
-                                className="flex items-center gap-3 bg-secondary-container/35 rounded-2xl px-4 py-3 min-w-[220px]"
+                                className="flex items-center gap-3 bg-secondary-container/35 rounded-2xl px-4 py-3 w-full sm:w-auto sm:min-w-[220px]"
                               >
                                 <div className="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-secondary">
                                   <Icon name="pill" className="h-5 w-5" />

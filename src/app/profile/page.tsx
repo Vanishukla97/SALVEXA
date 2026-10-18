@@ -505,8 +505,8 @@ export default function ProfilePage() {
               </label>
             </div>
 
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
+            <div className="flex-1 text-center md:text-left min-w-0">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2 break-words">
                 {user?.name || 'User'}
               </h1>
               <p className="text-on-surface-variant flex items-center justify-center md:justify-start gap-2">
@@ -806,8 +806,8 @@ export default function ProfilePage() {
                   Automated snapshot based on your latest saved profile and history.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-4">
-                <div className="bg-surface-container-lowest p-6 rounded-xl min-w-[200px] shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="bg-surface-container-lowest p-5 sm:p-6 rounded-xl shadow-sm">
                   <div className="flex justify-between items-start mb-4">
                     <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
                       Heart Rate
@@ -820,7 +820,7 @@ export default function ProfilePage() {
                   <p className="text-xs text-on-surface-variant">Derived trend metric</p>
                 </div>
 
-                <div className="bg-surface-container-lowest p-6 rounded-xl min-w-[200px] shadow-sm">
+                <div className="bg-surface-container-lowest p-5 sm:p-6 rounded-xl shadow-sm">
                   <div className="flex justify-between items-start mb-4">
                     <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
                       Glucose
@@ -836,7 +836,7 @@ export default function ProfilePage() {
                   <p className="text-xs text-on-surface-variant">Derived trend metric</p>
                 </div>
 
-                <div className="bg-surface-container-lowest p-6 rounded-xl min-w-[200px] shadow-sm">
+                <div className="bg-surface-container-lowest p-5 sm:p-6 rounded-xl shadow-sm">
                   <div className="flex justify-between items-start mb-4">
                     <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
                       BMI

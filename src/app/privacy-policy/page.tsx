@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
               <p className="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
                 Effective Date: May 16, 2026
               </p>
-              <h1 className="mt-4 text-4xl font-display font-extrabold text-on-surface">Privacy Policy</h1>
+              <h1 className="mt-4 text-3xl sm:text-4xl font-display font-extrabold text-on-surface">Privacy Policy</h1>
             </div>
             <button
               type="button"

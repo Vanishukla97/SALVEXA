@@ -80,7 +80,7 @@ function TermsPageContent() {
               <p className="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
                 Terms Version {CURRENT_TERMS_VERSION}
               </p>
-              <h1 className="mt-4 text-4xl font-display font-extrabold text-on-surface">
+              <h1 className="mt-4 text-3xl sm:text-4xl font-display font-extrabold text-on-surface">
                 Terms & Conditions
               </h1>
             </div>

@@ -146,9 +146,9 @@ export default function RecommendationsPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
-        <header className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold font-display text-on-surface tracking-tight">
+      <main className="pt-32 pb-20 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+        <header className="mb-8 sm:mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-on-surface tracking-tight">
             Medication Insights
           </h1>
           <p className="text-on-surface-variant text-lg mt-3 max-w-3xl">
@@ -235,7 +235,7 @@ export default function RecommendationsPage() {
                       className={`p-6 border-l-4 ${item.safe ? 'border-l-secondary' : 'border-l-error'}`}
                     >
                       <div className="flex items-start justify-between gap-3 mb-4">
-                        <h3 className="text-2xl font-display font-bold text-on-surface">{item.medicineName}</h3>
+                        <h3 className="text-xl sm:text-2xl font-display font-bold text-on-surface">{item.medicineName}</h3>
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-bold ${
                             item.safe ? 'bg-secondary/15 text-secondary' : 'bg-error-container text-error'

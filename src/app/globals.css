@@ -5,6 +5,7 @@
   --color-surface-container-low: #f1f4f6;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-high: #e5e9eb;
+  --color-surface-container-highest: #dde3e5;
 
   --color-primary: #006162;
   --color-primary-container: #2c7a7b;
@@ -12,11 +13,13 @@
 
   --color-secondary: #006d3d;
   --color-secondary-container: #8af6b0;
+  --color-on-secondary-container: #003820;
 
   --color-tertiary: #81472a;
 
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
 
   --color-on-surface: #181c1e;
   --color-on-surface-variant: #3f4949;
@@ -25,6 +28,8 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-label: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Custom utilities for Clinical Serenity design */

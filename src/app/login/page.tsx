@@ -227,7 +227,7 @@ function LoginContent() {
           </div>
 
           <div className="flex flex-col items-center lg:items-start w-full max-w-md mx-auto">
-            <div className="w-full bg-surface-container-lowest p-8 md:p-12 rounded-2xl shadow-ambient">
+            <div className="w-full bg-surface-container-lowest p-6 sm:p-8 md:p-12 rounded-2xl shadow-ambient">
               <div className="text-center lg:text-left mb-10">
                 <div className="font-display font-black text-2xl text-primary mb-2">
                   AI Medicine Rec
@@ -309,7 +309,7 @@ function LoginContent() {
           <div className="relative w-full max-w-xl rounded-[2rem] overflow-hidden border border-outline-variant/20 shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-surface-container-lowest via-surface to-surface-container-low"></div>
 
-            <div className="relative p-8 md:p-10">
+            <div className="relative p-6 sm:p-8 md:p-10">
               <div className="mb-8">
                 <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
                   <Icon name="verified_user" className="h-4 w-4" />

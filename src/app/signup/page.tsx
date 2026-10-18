@@ -120,7 +120,7 @@ export default function SignupPage() {
           </div>
 
           <div className="flex flex-col items-center lg:items-start w-full max-w-md mx-auto">
-            <div className="w-full bg-surface-container-lowest p-8 md:p-12 rounded-2xl shadow-ambient">
+            <div className="w-full bg-surface-container-lowest p-6 sm:p-8 md:p-12 rounded-2xl shadow-ambient">
               <div className="text-center lg:text-left mb-10">
                 <div className="font-display font-black text-2xl text-primary mb-2">AI Medicine Rec</div>
                 <h2 className="font-display text-3xl font-bold text-on-surface">Create account</h2>

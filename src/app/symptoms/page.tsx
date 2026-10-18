@@ -160,9 +160,9 @@ export default function SymptomsPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-20 px-6 max-w-6xl mx-auto min-h-screen">
-        <div className="mb-10">
-          <h1 className="font-display text-5xl font-extrabold text-on-surface tracking-tight">
+      <main className="pt-32 pb-20 px-4 sm:px-6 max-w-6xl mx-auto min-h-screen">
+        <div className="mb-8 sm:mb-10">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight">
             Symptom <span className="text-primary">Input</span>
           </h1>
           <p className="text-on-surface-variant mt-3 max-w-2xl">
@@ -172,7 +172,7 @@ export default function SymptomsPage() {
 
         <form className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" onSubmit={handleAnalyze}>
           <section className="lg:col-span-7 space-y-6">
-            <Card variant="glass" className="p-8">
+            <Card variant="glass" className="p-5 sm:p-8">
               <label className="block text-on-surface-variant text-sm font-semibold mb-3">
                 Add your symptoms
               </label>
@@ -222,7 +222,7 @@ export default function SymptomsPage() {
               </div>
             </Card>
 
-            <Card variant="glass" className="p-8">
+            <Card variant="glass" className="p-5 sm:p-8">
               <div className="flex items-center gap-3 mb-4">
                 <Icon name="priority_high" className="h-5 w-5 text-primary" />
                 <h2 className="font-display font-bold text-xl">Selected Symptoms</h2>
@@ -250,7 +250,7 @@ export default function SymptomsPage() {
               )}
             </Card>
 
-            <Card variant="glass" className="p-8 space-y-4">
+            <Card variant="glass" className="p-5 sm:p-8 space-y-4">
               <h3 className="font-display font-bold text-xl">Symptom Details</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
@@ -306,7 +306,7 @@ export default function SymptomsPage() {
           </section>
 
           <section className="lg:col-span-5">
-            <Card variant="glass" className="p-8 sticky top-28">
+            <Card variant="glass" className="p-5 sm:p-8 sticky top-28">
               <h3 className="font-display font-bold text-2xl mb-3">Ready to Analyze</h3>
               <p className="text-on-surface-variant mb-6">
                 Hybrid mode: AI symptom normalization + safety rules + doctor-review fallback.
