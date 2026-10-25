@@ -220,7 +220,7 @@ export default function SettingsPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24 px-4 sm:px-6 max-w-5xl mx-auto min-h-screen">
+      <main className="pt-28 pb-24 px-4 sm:px-6 max-w-5xl mx-auto min-h-screen">
         <header className="mb-10 md:mb-12 animate-slide-up">
           <h1 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-on-surface mb-2">
             Settings

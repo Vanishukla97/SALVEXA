@@ -73,7 +73,7 @@ function TermsPageContent() {
     <>
       <Navbar />
 
-      <main className="pt-32 pb-20 px-4 md:px-6 max-w-5xl mx-auto min-h-screen">
+      <main className="pt-28 pb-20 px-4 md:px-6 max-w-5xl mx-auto min-h-screen">
         <section className="rounded-3xl bg-surface-container-lowest border border-outline-variant/25 p-6 md:p-10 shadow-ambient">
           <div className="flex items-start justify-between gap-4">
             <div>

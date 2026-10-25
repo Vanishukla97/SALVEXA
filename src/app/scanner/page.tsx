@@ -259,8 +259,9 @@ function ScannerContent() {
     <>
       <Navbar />
 
-      <main className="pt-32 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
-        <section className="mb-8 sm:mb-12 text-center md:text-left">
+      <main className="pt-28 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+        <section className="mb-8 sm:mb-10 border-b border-outline-variant/40 pb-7 text-center md:text-left">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[.16em] text-primary">Health workspace / Prescription scanner</p>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight mb-4 max-w-4xl">
             Prescription <span className="text-primary">Care Assistant</span>
           </h1>

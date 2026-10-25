@@ -8,19 +8,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', children, ...props }, ref) => {
     
-    const baseStyles = 'inline-flex items-center justify-center font-display font-bold transition-transform active:scale-95 rounded-xl';
+    const baseStyles = 'inline-flex items-center justify-center gap-2 font-display font-bold transition-all active:scale-[.98] rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:pointer-events-none disabled:opacity-50';
     
     const variants = {
-      primary: 'bg-hero-gradient text-on-primary shadow-xl shadow-primary/30',
-      secondary: 'bg-surface-container-high text-primary hover:bg-surface-container-highest',
+      primary: 'bg-primary text-on-primary shadow-md shadow-primary/15 hover:bg-primary-container hover:shadow-lg',
+      secondary: 'bg-white border border-outline-variant/60 text-on-surface hover:bg-surface-container-low',
       tertiary: 'text-primary hover:text-primary-container',
-      danger: 'bg-error text-on-error shadow-lg shadow-error/20 hover:bg-error/90',
+      danger: 'bg-error text-on-error shadow-sm hover:bg-error/90',
     };
     
     const sizes = {
-      sm: 'px-4 py-2 text-sm',
-      md: 'px-6 py-3 text-base',
-      lg: 'px-8 py-4 text-lg',
+      sm: 'px-3.5 py-2 text-sm',
+      md: 'px-5 py-2.5 text-sm',
+      lg: 'px-6 py-3 text-base',
     };
 
     return (

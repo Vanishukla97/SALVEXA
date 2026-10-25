@@ -389,8 +389,8 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-black backdrop-blur-xl shadow-ambient">
-        <nav className="h-20 max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-outline-variant/40 shadow-[0_4px_18px_-14px_rgba(23,43,44,.32)]">
+        <nav className="h-[68px] max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="h-full flex items-center gap-2 lg:gap-8">
             <div className="flex items-center gap-2 min-w-0">
               <button
@@ -403,9 +403,9 @@ export function Navbar() {
               </button>
               <Link
                 href="/"
-                className="inline-flex items-center text-xl font-black font-display tracking-wide shrink-0"
-                style={{ color: '#FFFFFF' }}
+                className="inline-flex items-center gap-2 text-lg font-extrabold font-display tracking-tight text-on-surface shrink-0"
               >
+                <span aria-hidden="true" className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-white text-sm">S</span>
                 SALVEXA
               </Link>
             </div>
@@ -418,13 +418,13 @@ export function Navbar() {
                     key={item.href}
                     href={item.href}
                     className={`relative pb-1 px-1 font-display tracking-tight font-semibold whitespace-nowrap shrink-0 transition-colors duration-300 ${
-                      isActive ? 'text-white' : 'text-white/75 hover:text-white'
+                      isActive ? 'text-primary' : 'text-on-surface-variant hover:text-primary'
                     }`}
                   >
                     {item.label}
                     <span
                       aria-hidden="true"
-                      className={`absolute left-0 -bottom-1 h-0.5 rounded-full bg-white transition-all duration-300 ease-out ${
+                      className={`absolute left-0 -bottom-1 h-0.5 rounded-full bg-primary transition-all duration-300 ease-out ${
                         isActive ? 'w-full opacity-100' : 'w-0 opacity-0'
                       }`}
                     />
@@ -441,7 +441,7 @@ export function Navbar() {
                   className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl hover:bg-surface-container-high transition-transform active:scale-95 whitespace-nowrap"
                   aria-label="Open notifications"
                 >
-                  <Icon name="notifications" className="h-5 w-5 text-white" />
+                  <Icon name="notifications" className="h-5 w-5 text-on-surface-variant" />
                   {unreadCount > 0 ? (
                     <span className="inline-flex min-w-5 h-5 px-1 items-center justify-center rounded-full bg-error text-white text-[11px] font-bold">
                       {unreadCount > 99 ? '99+' : unreadCount}
@@ -599,7 +599,7 @@ export function Navbar() {
                     onClick={() => setMenuOpen((prev) => !prev)}
                     className="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high transition-transform active:scale-95"
                   >
-                    <Icon name="person" className="h-6 w-6 text-white" />
+                    <Icon name="person" className="h-6 w-6 text-on-surface-variant" />
                   </button>
                   {menuOpen ? (
                     <div className="absolute right-0 mt-2 min-w-[220px] rounded-xl border border-outline-variant/20 bg-surface-container-lowest shadow-2xl overflow-hidden z-50">
@@ -636,7 +636,7 @@ export function Navbar() {
                   href="/login"
                   className="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high transition-transform active:scale-95"
                 >
-                  <Icon name="person" className="h-6 w-6 text-white" />
+                  <Icon name="person" className="h-6 w-6 text-on-surface-variant" />
                 </Link>
               )}
 

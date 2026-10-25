@@ -23,8 +23,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "AI Health Guide - Clinical Serenity",
-  description: "AI-powered medical recommendation and symptom checker application.",
+  title: "Salvexa — Clearer steps for your health",
+  description: "Understand symptoms, explore AI-assisted health guidance, and keep your medical information organized with Salvexa.",
   icons: {
     icon: [
       { url: "/icon.png?v=3", type: "image/png" },
@@ -48,7 +48,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-surface text-on-surface">
         <UserSettingsProvider>
           <I18nProvider>
-            {children}
+            <div className="flex min-h-screen flex-col pt-[68px]">{children}</div>
             <AppFooter />
           </I18nProvider>
         </UserSettingsProvider>

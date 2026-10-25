@@ -202,27 +202,22 @@ function LoginContent() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 text-primary rounded-full mb-4">
               <Icon name="health_and_safety" className="h-5 w-5" />
               <span className="text-sm font-semibold font-label">
-                Clinical Serenity Architecture
+                A calmer health workspace
               </span>
             </div>
 
             <h1 className="font-display text-5xl font-black text-on-surface leading-[1.1] tracking-tight">
-              Your Personalized <br />
-              <span className="text-primary">Medical Insights</span> <br />
-              Start Here.
+              Your health, <br />
+              <span className="text-primary">clearly organized.</span>
             </h1>
 
             <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-              Access high-fidelity AI recommendations tailored to your unique symptoms and health profile.
+              Sign in to review your health information and continue with Salvexa’s available tools.
             </p>
 
-            <div className="relative w-full aspect-square max-w-md rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                className="w-full h-full object-cover"
-                alt="Medical tech environment"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp4bnfyNy6y_s3xFlARB4Zq9uvjg-vLM_jqJhqiet8x_z6wEwEMKL1EomLbWiuzZeO4I0lu1I06jdEEZce7fkL3eJFMER4azF8PFWzJnXFCRG1eucl9RlXsBaOQtxdqWoKmevbV82D8VK9gH7hPSpOYKsd4w9pltRvyOCphcA3aB_7JaEoDOwSuqSNzh0MrwUmWn9iZHqIhdsUWF9-dFTxm17haFM-_qTbLLlV8OYGuppTpVWWb4OBnbWzb9Mc0joIufu84s4QGwjX"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+            <div className="relative flex aspect-square w-full max-w-md flex-col justify-between overflow-hidden rounded-2xl border border-outline-variant/40 bg-[#eaf3ef] p-8 shadow-lg">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-white"><Icon name="health_and_safety" className="h-6 w-6" /></span>
+              <div><p className="text-xs font-bold uppercase tracking-[.16em] text-primary">Your health workspace</p><p className="mt-3 font-display text-3xl font-bold leading-tight text-on-surface">Thoughtful tools.<br/>Clearer next steps.</p><p className="mt-3 max-w-xs text-sm leading-6 text-on-surface-variant">Keep your symptoms, guidance, and important medical information together.</p></div>
             </div>
           </div>
 
@@ -230,7 +225,7 @@ function LoginContent() {
             <div className="w-full bg-surface-container-lowest p-6 sm:p-8 md:p-12 rounded-2xl shadow-ambient">
               <div className="text-center lg:text-left mb-10">
                 <div className="font-display font-black text-2xl text-primary mb-2">
-                  AI Medicine Rec
+                  SALVEXA
                 </div>
                 <h2 className="font-display text-3xl font-bold text-on-surface">
                   Welcome back

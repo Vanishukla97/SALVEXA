@@ -115,14 +115,14 @@ export default function SignupPage() {
               <span className="text-primary">for Better Care</span>
             </h1>
             <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-              Build your health profile once, and get personalized recommendations powered by your own data.
+              Set up your profile to keep relevant health information together as you use Salvexa.
             </p>
           </div>
 
           <div className="flex flex-col items-center lg:items-start w-full max-w-md mx-auto">
             <div className="w-full bg-surface-container-lowest p-6 sm:p-8 md:p-12 rounded-2xl shadow-ambient">
               <div className="text-center lg:text-left mb-10">
-                <div className="font-display font-black text-2xl text-primary mb-2">AI Medicine Rec</div>
+                <div className="font-display font-black text-2xl text-primary mb-2">SALVEXA</div>
                 <h2 className="font-display text-3xl font-bold text-on-surface">Create account</h2>
                 <p className="text-on-surface-variant mt-2 font-label text-sm">Signup and start your medical journey</p>
               </div>

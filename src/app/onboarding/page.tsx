@@ -298,7 +298,7 @@ export default function OnboardingPage() {
     return (
       <>
         <Navbar />
-        <main className="mx-auto min-h-screen max-w-5xl px-4 pt-32 pb-24">
+        <main className="mx-auto min-h-screen max-w-5xl px-4 pt-28 pb-24">
           <section className="rounded-3xl border border-outline-variant/20 bg-surface-container-low p-8">
             <p className="text-on-surface-variant">Loading your details...</p>
           </section>
@@ -310,7 +310,7 @@ export default function OnboardingPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto min-h-screen max-w-5xl px-4 pt-32 pb-24 sm:px-6">
+      <main className="mx-auto min-h-screen max-w-5xl px-4 pt-28 pb-24 sm:px-6">
         <section className="mb-8 rounded-3xl border border-primary/20 bg-primary/10 p-6 animate-slide-up">
           <h1 className="font-display text-2xl font-black text-primary">Finish your emergency setup</h1>
           <p className="mt-2 text-on-surface-variant">

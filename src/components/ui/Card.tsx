@@ -6,11 +6,11 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', variant = 'default', children, ...props }, ref) => {
-    const baseStyles = 'rounded-[2rem] transition-all duration-500';
+    const baseStyles = 'rounded-2xl transition-all duration-200';
     
     const variants = {
-      default: 'bg-surface-container-low hover:bg-surface-container-lowest shadow-sm hover:shadow-xl hover:-translate-y-2',
-      glass: 'glass-card border border-outline-variant/10 shadow-2xl',
+      default: 'bg-white border border-outline-variant/40 shadow-sm hover:shadow-md',
+      glass: 'glass-card border border-outline-variant/40 shadow-sm',
     };
 
     return (

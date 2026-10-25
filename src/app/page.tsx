@@ -2,239 +2,125 @@
 
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Navbar } from '../components/layout/Navbar';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { getAuthToken } from '../lib/auth';
-import Link from 'next/link';
+
+const tools = [
+  { icon: 'medical_services', title: 'Symptom checker', desc: 'Describe how you feel and organize the details that matter.', href: '/symptoms', tag: 'Understand symptoms' },
+  { icon: 'medication', title: 'Medicine guidance', desc: 'Review available guidance, cautions, and safety information.', href: '/recommendations', tag: 'Explore guidance' },
+  { icon: 'qr_code_scanner', title: 'Prescription scanner', desc: 'Turn a prescription image into a report you can review.', href: '/scanner', tag: 'Read a prescription' },
+  { icon: 'monitoring', title: 'Medical history', desc: 'Keep your health records and scan history together.', href: '/medical-history', tag: 'Stay organized' },
+];
 
 export default function Home() {
   const router = useRouter();
   const [showLearnMore, setShowLearnMore] = useState(false);
-
   const handleGetStarted = useCallback(() => {
-    const token = getAuthToken();
-    if (token) {
-      router.push('/symptoms');
-    } else {
-      router.push('/login');
-    }
+    router.push(getAuthToken() ? '/symptoms' : '/login');
   }, [router]);
+
   return (
     <>
       <Navbar />
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="relative min-h-screen lg:min-h-[921px] flex items-center overflow-hidden bg-surface-container-low">
-          <div className="absolute inset-0 z-0">
-            <img 
-              loading="lazy"
-              className="w-full h-full object-cover opacity-20 mix-blend-overlay" 
-              alt="Medical background" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlRv-7gAP_KirBCs2Q3Acj_2Z66xvh7fMGTGEpgXfMIIZ1HtrFrajyZf25nB34ItQj-aFDqKv8GUi9BAT4QqJsUliEopGykRqvoiEH2MOIga7541OiQU4i4WBi7oeHvEypqNSc4eCPL1BrNUNIhjbbTtQYjCnXGZASyl2BX_PziVQ1EEOV9QeU3bcUtaRKmynZxdOMY3VUgVGstUooXE_I5zSTq0txC-iCA1rE3_mEjP5ReaJuDyxVNQYR2KsEDjmUBhCprSIvM1Aw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/80 to-transparent"></div>
-          </div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
-            <div className="space-y-6 sm:space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-container/30 text-on-secondary-container font-semibold text-sm">
-                <Icon name="verified_user" className="h-[18px] w-[18px]" />
-                <span>Next-Generation Healthcare</span>
+      <main>
+        <section className="relative overflow-hidden border-b border-outline-variant/30 bg-[#f1f6f3]">
+          <div aria-hidden="true" className="absolute -right-24 -top-32 h-[480px] w-[480px] rounded-full border border-primary/10" />
+          <div aria-hidden="true" className="absolute -right-8 -top-16 h-[350px] w-[350px] rounded-full border border-primary/10" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:py-24">
+            <div className="max-w-2xl">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white px-3.5 py-2 text-xs font-semibold text-primary shadow-sm">
+                <span className="h-2 w-2 rounded-full bg-secondary" /> A calmer way to navigate health information
               </div>
-              
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-on-surface leading-[1.1] tracking-tight">
-                AI-powered health assistance
+              <h1 className="font-display text-[2.65rem] font-extrabold leading-[1.1] tracking-[-0.045em] text-on-surface sm:text-5xl lg:text-[3.75rem]">
+                Understand what you&apos;re feeling. <span className="text-primary">Know what to do next.</span>
               </h1>
-              
-              <p className="text-lg text-on-surface-variant max-w-lg leading-relaxed font-medium">
-                Personalized clinical intelligence at your fingertips. From symptom analysis to prescription management, we bring serenity to your medical journey.
+              <p className="mt-6 max-w-xl text-base leading-7 text-on-surface-variant sm:text-lg sm:leading-8">
+                Salvexa helps you organize symptoms, explore AI-assisted health guidance, and keep important medical information in one place.
               </p>
-              
-              <div className="flex flex-wrap gap-4 pt-4">
-                <Button variant="primary" size="lg" onClick={handleGetStarted}>Get Started</Button>
-                <Button variant="secondary" size="lg" onClick={() => setShowLearnMore(true)}>Learn More</Button>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button size="lg" onClick={handleGetStarted}>Get started <Icon name="arrow_forward" className="h-4 w-4" /></Button>
+                <Button size="lg" variant="secondary" onClick={() => setShowLearnMore(true)}>How it works</Button>
+              </div>
+              <div className="mt-8 flex items-center gap-2 text-sm text-on-surface-variant">
+                <Icon name="verified_user" className="h-4 w-4 text-primary" />
+                <span>Designed with safety and privacy in mind</span>
               </div>
             </div>
-            
-            <div className="relative hidden lg:block">
-              <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-surface-container-lowest transform rotate-2">
-                <img 
-                  loading="lazy"
-                  className="w-full h-auto" 
-                  alt="Doctor with tablet" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2aDNgTKQoyvYc9YM8Ejw9P5jhbLpJJgzjjKDXeMT3qkyuoegsP8B78OvqlSKErLKBZgiAa-pb9j_z5VMALY68rLRojVMufJZKeR1EEE_tjT-9fNVSJzFx0z2hCqSPgzhVhbIPSgTOtyigVs7GQXq3hTyAO7PSghpZRoP3QfOrCiURGjbX1gDsSit8SQWwa7ELEXXg2hKdY5u2WXQm2S1KcZLe4Cj8SvYvImz50fR3arB2_qIl19CVRtswKqcFV3xXRL09FENtsByZ"
-                />
-              </div>
-              <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-              
-              {/* Floating Stat Card */}
-              <div className="absolute bottom-12 -left-8 z-20 bg-surface-container-lowest/80 backdrop-blur-xl p-6 rounded-[2rem] shadow-2xl border border-outline-variant/10 max-w-[240px]">
-                <div className="flex items-center gap-3 mb-2">
-                  <Icon name="favorite" className="h-5 w-5 text-secondary" />
-                  <span className="font-display font-bold text-on-surface">Vitality Score</span>
-                </div>
-                <div className="h-12 w-full flex items-end gap-1 px-1">
-                  <div className="bg-secondary/40 w-full h-[40%] rounded-t-sm"></div>
-                  <div className="bg-secondary/40 w-full h-[60%] rounded-t-sm"></div>
-                  <div className="bg-secondary/40 w-full h-[55%] rounded-t-sm"></div>
-                  <div className="bg-secondary/40 w-full h-[85%] rounded-t-sm"></div>
-                  <div className="bg-secondary/40 w-full h-[70%] rounded-t-sm"></div>
-                  <div className="bg-secondary/40 w-full h-[95%] rounded-t-sm"></div>
-                  <div className="bg-secondary w-full h-[75%] rounded-t-sm"></div>
-                </div>
-                <p className="text-xs text-on-surface-variant mt-2 font-medium">98% precision in health tracking</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Comprehensive Care Modules */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-surface px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-12 sm:mb-16 text-center max-w-2xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-on-surface mb-4">Comprehensive Care Modules</h2>
-              <p className="text-on-surface-variant font-medium">Our intelligent suite of tools is designed to provide a holistic view of your health with clinical-grade accuracy.</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { icon: 'medical_services', title: 'Symptom Checker', desc: 'Analyze your symptoms with our AI to understand potential conditions instantly.', color: 'primary', link: 'Check Now', href: '/symptoms' },
-                { icon: 'medication', title: 'Medicine Guide', desc: 'Get intelligent recommendations and dosage guidelines tailored to your profile.', color: 'secondary', link: 'Explore', href: '/recommendations' },
-                { icon: 'qr_code_scanner', title: 'Prescript Scanner', desc: 'Instantly digitize paper prescriptions to track refills and interactions.', color: 'tertiary', link: 'Scan Now', href: '/scanner' },
-                { icon: 'monitoring', title: 'Profile Tracking', desc: 'Monitor your long-term health metrics and history in one secure dashboard.', color: 'primary', link: 'View History', href: '/medical-history' }
-              ].map((module, i) => (
-                <Card key={i} className="group p-6 sm:p-8">
-                  <div className={`w-14 h-14 bg-${module.color}/10 rounded-2xl flex items-center justify-center mb-6 text-${module.color} group-hover:bg-${module.color} group-hover:text-on-primary transition-colors`}>
-                    <Icon name={module.icon} className="h-8 w-8" />
+            <div className="relative mx-auto w-full max-w-[520px] lg:ml-auto">
+              <div className="absolute -inset-5 rounded-[2rem] bg-primary/[.06] blur-2xl" />
+              <Card className="relative overflow-hidden rounded-2xl border border-outline-variant/50 bg-white shadow-[0_24px_70px_-35px_rgba(15,58,53,.38)]">
+                <div className="flex items-center justify-between border-b border-outline-variant/30 px-5 py-4 sm:px-6">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-white"><Icon name="favorite" className="h-5 w-5" /></span>
+                    <div><p className="text-sm font-bold">Your health workspace</p><p className="text-xs text-on-surface-variant">A clear place to begin</p></div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3">{module.title}</h3>
-                  <p className="text-on-surface-variant text-sm leading-relaxed mb-6">{module.desc}</p>
-                  <Link className={`text-${module.color} font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all`} href={module.href}>
-                    {module.link} <Icon name="arrow_forward" className="h-4 w-4" />
-                  </Link>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-        
-        {/* Simple Path to Clarity */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-surface-container-low px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-              <div>
-                <h2 className="text-3xl sm:text-4xl font-display font-bold text-on-surface mb-6">Simple Path to Clarity</h2>
-                <p className="text-on-surface-variant mb-8 sm:mb-12 font-medium max-w-lg">We&apos;ve refined the healthcare process down to three effortless steps, allowing you to focus on recovery rather than logistics.</p>
-                <div className="space-y-6 sm:space-y-8">
-                  {[
-                    { step: '1', title: 'Input Symptoms', desc: 'Briefly describe how you feel using natural language or select from our visual catalog.' },
-                    { step: '2', title: 'AI Analysis', desc: 'Our medical engine cross-references millions of data points to provide precise insight.' },
-                    { step: '3', title: 'Get Recommendation', desc: 'Receive a personalized care plan, medicine advice, and next steps for your wellness.' }
-                  ].map((s, i) => (
-                    <div key={i} className="flex gap-6">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-display font-black">{s.step}</div>
-                      <div>
-                        <h4 className="text-xl font-display font-bold mb-1">{s.title}</h4>
-                        <p className="text-on-surface-variant text-sm">{s.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+                  <span className="rounded-full bg-secondary-container px-2.5 py-1 text-[11px] font-semibold text-on-secondary-container">Private</span>
                 </div>
-              </div>
-              <div className="relative">
-                <img loading="lazy" className="rounded-[3rem] shadow-2xl relative z-10" alt="App Preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE5qJsWM3VVgpHVwQPV7d0JNYT8v6cAbpFxtUxcfUXN35JMCjAK7Dkrh6YvTo_hIdnD4YuzMxpyB4njYQMydl9C3h20r1ta3-TYM8PNyM-SATzG-yVWRJjVrNdjgKG7Qc1e_-MtVZIg_FDx9k_pBokB1Q4WI2HCz9WnEx7_n5h6lY3s3X321o-8fLdIEJzub3pMAkKjRvJOnr-TV3SRJc2Ft0f0-gZ0lgaEMYThbX3SHTsgf5W-Xr_JzBtxylJRXS_eBsJup3psT8u"/>
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-secondary-container rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
-                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-primary-container rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
-              </div>
+                <div className="space-y-4 p-5 sm:p-6">
+                  <div className="rounded-xl bg-surface px-4 py-3.5">
+                    <div className="mb-2 flex items-center justify-between"><span className="text-xs font-semibold text-on-surface-variant">START WITH HOW YOU FEEL</span><Icon name="edit" className="h-4 w-4 text-primary" /></div>
+                    <p className="text-sm font-medium text-on-surface">Tell us about your symptoms</p>
+                    <div className="mt-3 flex gap-2"><span className="rounded-full border border-primary/20 bg-white px-3 py-1 text-xs text-primary">Headache</span><span className="rounded-full border border-primary/20 bg-white px-3 py-1 text-xs text-primary">Fever</span><span className="rounded-full border border-dashed border-outline-variant px-3 py-1 text-xs text-on-surface-variant">+ Add</span></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link href="/symptoms" className="group rounded-xl border border-outline-variant/40 p-4 hover:border-primary/40 hover:bg-[#f7fbf9]"><Icon name="medical_services" className="mb-3 h-5 w-5 text-primary" /><p className="text-sm font-bold">Symptom check</p><p className="mt-1 text-xs text-on-surface-variant">Share what&apos;s changed</p></Link>
+                    <Link href="/scanner" className="group rounded-xl border border-outline-variant/40 p-4 hover:border-primary/40 hover:bg-[#f7fbf9]"><Icon name="qr_code_scanner" className="mb-3 h-5 w-5 text-primary" /><p className="text-sm font-bold">Scan a prescription</p><p className="mt-1 text-xs text-on-surface-variant">Review a saved report</p></Link>
+                  </div>
+                  <div className="flex items-start gap-3 rounded-xl border border-[#e8dccb] bg-[#fbf8f2] p-3.5">
+                    <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0 text-[#8a633b]" /><p className="text-xs leading-5 text-[#68563f]">Salvexa provides educational guidance. It does not replace advice from a qualified healthcare professional.</p>
+                  </div>
+                </div>
+                <div className="border-t border-outline-variant/30 bg-white px-5 py-3 text-center text-[11px] text-on-surface-variant">A thoughtful starting point for your next health conversation</div>
+              </Card>
+              <div className="absolute -bottom-5 -left-4 hidden items-center gap-2 rounded-xl border border-outline-variant/40 bg-white px-4 py-3 text-xs font-semibold text-on-surface shadow-md sm:flex"><span className="grid h-7 w-7 place-items-center rounded-lg bg-secondary-container text-secondary"><Icon name="health_and_safety" className="h-4 w-4" /></span> Safety information stays visible</div>
             </div>
           </div>
         </section>
 
+        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
+          <div className="mb-9 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div><p className="mb-2 text-xs font-bold uppercase tracking-[.16em] text-primary">Your health, organized</p><h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Useful tools for every step</h2></div>
+            <p className="max-w-md text-sm leading-6 text-on-surface-variant">Move from questions to clearer information with tools that work together around your existing health details.</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tools.map((tool, i) => <Card key={tool.href} className="group p-5 sm:p-6">
+              <div className="mb-8 flex items-center justify-between"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#eaf4f0] text-primary"><Icon name={tool.icon} className="h-5 w-5" /></span><span className="text-xs font-medium text-on-surface-variant">0{i + 1}</span></div>
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-primary">{tool.tag}</p><h3 className="font-display text-lg font-bold">{tool.title}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-on-surface-variant">{tool.desc}</p>
+              <Link className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-on-surface hover:text-primary" href={tool.href}>Explore <Icon name="arrow_forward" className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
+            </Card>)}
+          </div>
+        </section>
+
+        <section className="border-y border-outline-variant/30 bg-white">
+          <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:py-20">
+            <div><p className="mb-2 text-xs font-bold uppercase tracking-[.16em] text-primary">A simple flow</p><h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">From concern to a clearer conversation.</h2><p className="mt-4 max-w-md text-sm leading-7 text-on-surface-variant">Keep the important details together, understand what the system returned, and share relevant information with a professional.</p></div>
+            <div className="divide-y divide-outline-variant/40">
+              {[['01','Describe your symptoms','Add the details and context that help explain how you feel.'],['02','Review available guidance','Explore the returned information, including any safety notices.'],['03','Choose your next step','Keep your history organized and contact a professional when needed.']].map(([n,t,d])=><div key={n} className="flex gap-5 py-5 first:pt-0 last:pb-0"><span className="font-display text-sm font-bold text-primary">{n}</span><div><h3 className="font-display font-bold">{t}</h3><p className="mt-1 text-sm leading-6 text-on-surface-variant">{d}</p></div></div>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-16">
+          <div className="flex flex-col gap-5 rounded-2xl bg-[#eaf3ef] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+            <div className="flex gap-4"><span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-primary"><Icon name="health_and_safety" className="h-5 w-5" /></span><div><h2 className="font-display text-xl font-bold">Health guidance needs a human perspective.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant">AI-assisted information can help you prepare, but it cannot diagnose or replace a clinician. Seek urgent care for severe or rapidly worsening symptoms.</p></div></div>
+            <Link href="/privacy-policy" className="shrink-0 text-sm font-semibold text-primary hover:underline">Privacy & safety</Link>
+          </div>
+        </section>
       </main>
 
-      {showLearnMore ? (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" onClick={() => setShowLearnMore(false)} />
-          <div className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl bg-surface-container-lowest border border-outline-variant/20 shadow-2xl p-6 sm:p-10 animate-slide-up">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-display font-extrabold text-on-surface">Learn More</h2>
-              <button
-                type="button"
-                onClick={() => setShowLearnMore(false)}
-                className="p-2 rounded-lg hover:bg-surface-container-low transition-colors"
-              >
-                <Icon name="close" className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="space-y-6 text-on-surface">
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">Your Health, Simplified</h3>
-                <p className="leading-relaxed">
-                  The AI-Based Medicine Recommendation System is designed to help users better understand their symptoms and explore possible medicine options in a simple and organized way. By combining your health information with symptom analysis, the platform provides personalized recommendations while keeping safety as a priority.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">How It Works</h3>
-                <p className="mb-3">Getting started is simple:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Create your account and complete your health profile.</li>
-                  <li>Tell us what symptoms you&apos;re experiencing.</li>
-                  <li>Add details such as how long you&apos;ve had them and how severe they are.</li>
-                  <li>The system analyzes your information and provides medicine recommendations along with important usage instructions and precautions.</li>
-                </ul>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">Personalized for You</h3>
-                <p className="mb-3">Everyone&apos;s health situation is different. That&apos;s why the system takes into account information such as:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Age and weight</li>
-                  <li>Medical history</li>
-                  <li>Current medications</li>
-                  <li>Allergies</li>
-                  <li>Previous surgeries</li>
-                  <li>Special conditions such as pregnancy or breastfeeding</li>
-                </ul>
-                <p className="mt-3">This helps provide recommendations that are more relevant to your individual needs.</p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">Prescription Scanner</h3>
-                <p className="mb-3">Have a prescription but finding it difficult to understand?</p>
-                <p>Simply upload a prescription image and the system will extract the key information and present it in a clearer, more user-friendly format. It can help you understand prescribed medicines, dosage instructions, and other important details.</p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">Health Dashboard</h3>
-                <p>Your health information stays organized in one place. The dashboard allows you to manage your profile, review medical history, and view health insights through easy-to-understand charts and visualizations.</p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-display font-bold text-primary mb-3">Built with Safety in Mind</h3>
-                <p>Before displaying recommendations, the system checks for factors such as allergies, existing medications, and other health conditions. If any potential risks are detected, appropriate warnings and precautions are provided.</p>
-              </section>
-
-              <section className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-                <h3 className="text-xl font-display font-bold text-amber-800 mb-3">Important Note</h3>
-                <p className="text-amber-900 leading-relaxed">
-                  This platform is intended to provide general health guidance and educational information. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. For serious symptoms or medical emergencies, always consult a qualified healthcare professional.
-                </p>
-              </section>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-outline-variant/20 flex justify-end">
-              <Button variant="primary" onClick={() => setShowLearnMore(false)}>
-                Close
-              </Button>
-            </div>
-          </div>
+      {showLearnMore ? <div className="fixed inset-0 z-[110] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="learn-more-title">
+        <button aria-label="Close dialog" className="absolute inset-0 cursor-default bg-on-surface/50" onClick={() => setShowLearnMore(false)} />
+        <div className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-outline-variant/40 bg-white p-6 shadow-2xl sm:p-9">
+          <div className="mb-6 flex items-center justify-between"><h2 id="learn-more-title" className="font-display text-2xl font-bold">How Salvexa works</h2><button type="button" aria-label="Close" onClick={() => setShowLearnMore(false)} className="rounded-lg p-2 hover:bg-surface"><Icon name="close" className="h-5 w-5" /></button></div>
+          <div className="space-y-5 text-sm leading-7 text-on-surface-variant"><p>Salvexa brings symptom entry, AI-assisted medicine guidance, prescription scanning, and medical history into one place. Add the health context you choose to share, then review the information returned by the system.</p><p>Safety notices and warnings are shown alongside relevant guidance when provided. This service is educational and cannot provide a diagnosis or replace professional medical advice. Always consult a qualified healthcare professional before making treatment decisions.</p><p>Your account and health details are handled through the existing Salvexa application services. Visit the <Link className="font-semibold text-primary underline" href="/privacy-policy" onClick={() => setShowLearnMore(false)}>privacy policy</Link> for more information.</p></div>
+          <div className="mt-8 flex justify-end"><Button onClick={() => setShowLearnMore(false)}>Got it</Button></div>
         </div>
-      ) : null}
+      </div> : null}
     </>
   );
 }

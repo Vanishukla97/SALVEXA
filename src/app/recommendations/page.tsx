@@ -146,8 +146,9 @@ export default function RecommendationsPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-20 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+      <main className="pt-28 pb-20 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
         <header className="mb-8 sm:mb-10">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[.16em] text-primary">Health workspace / Guidance</p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-on-surface tracking-tight">
             Medication Insights
           </h1>

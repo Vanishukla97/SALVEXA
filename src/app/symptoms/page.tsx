@@ -160,8 +160,9 @@ export default function SymptomsPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-20 px-4 sm:px-6 max-w-6xl mx-auto min-h-screen">
-        <div className="mb-8 sm:mb-10">
+      <main className="pt-28 pb-20 px-4 sm:px-6 max-w-6xl mx-auto min-h-screen">
+        <div className="mb-8 sm:mb-10 border-b border-outline-variant/40 pb-7">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[.16em] text-primary">Health workspace / Symptom checker</p>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface tracking-tight">
             Symptom <span className="text-primary">Input</span>
           </h1>

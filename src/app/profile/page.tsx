@@ -447,7 +447,7 @@ export default function ProfilePage() {
     return (
       <>
         <Navbar />
-        <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        <main className="pt-28 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
           <section className="rounded-3xl bg-surface-container-low p-8 border border-outline-variant/20 animate-slide-up">
             <p className="text-on-surface-variant">Loading profile...</p>
           </section>
@@ -459,7 +459,7 @@ export default function ProfilePage() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+      <main className="pt-28 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
         {!isProfileComplete ? (
           <section className="rounded-3xl bg-primary/10 border border-primary/20 p-6 mb-8 animate-slide-up">
             <h2 className="font-display text-xl font-bold text-primary mb-2">
